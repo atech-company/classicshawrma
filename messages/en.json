@@ -1,0 +1,117 @@
+{
+  "meta": {
+    "title": "Classic Shawarma",
+    "description": "Order shawarma for takeaway or delivery."
+  },
+  "nav": {
+    "home": "Home",
+    "menu": "Menu",
+    "cart": "Cart",
+    "orderNow": "Order Now",
+    "language": "العربية"
+  },
+  "home": {
+    "tagline": "No Shawarma, No Love",
+    "subtitle": "Good food and a better mood.",
+    "featured": "Featured",
+    "categories": "Browse the menu",
+    "categoriesEmpty": "The menu is being prepared. Check back soon.",
+    "about": "About us",
+    "hours": "Opening hours",
+    "contact": "Contact",
+    "hoursUnavailable": "Hours will appear here when configured."
+  },
+  "menu": {
+    "title": "Menu",
+    "search": "Search dishes…",
+    "searchEmpty": "No menu items match that search. Try another dish or category.",
+    "all": "All",
+    "empty": "No dishes yet. Our kitchen is getting ready.",
+    "unavailable": "Sold out",
+    "add": "Add to cart",
+    "from": "From",
+    "error": "Could not load the menu. Please try again.",
+    "priceOnRequest": "Price on request"
+  },
+  "item": {
+    "quantity": "Quantity",
+    "notes": "Special instructions",
+    "variant": "Choose size",
+    "add": "Add to cart",
+    "quickAdd": "Quick add",
+    "customize": "Choose options",
+    "added": "Added",
+    "back": "Back to menu",
+    "priceOnRequest": "Please call to confirm the price"
+  },
+  "cart": {
+    "title": "Your cart",
+    "empty": "Your cart is empty.",
+    "browse": "Browse menu",
+    "subtotal": "Subtotal",
+    "checkout": "Checkout",
+    "remove": "Remove",
+    "update": "Update"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "name": "Full name",
+    "phone": "Phone number",
+    "orderType": "Order type",
+    "takeaway": "Takeaway",
+    "delivery": "Delivery",
+    "address": "Delivery address",
+    "deliveryNotes": "Delivery instructions",
+    "notes": "Order notes",
+    "payment": "Payment",
+    "cashPickup": "Cash on pickup",
+    "cashDelivery": "Cash on delivery",
+    "fees": "Delivery fee",
+    "total": "Total",
+    "place": "Place order",
+    "placing": "Placing order…",
+    "error": "Could not place the order. Please check your details."
+  },
+  "order": {
+    "title": "Order received",
+    "number": "Order number",
+    "status": "Status",
+    "payment": "Payment",
+    "type": "Order type",
+    "items": "Items",
+    "total": "Total",
+    "thanks": "Thank you! We received your order.",
+    "notFound": "Order not found.",
+    "liveStatus": "Live order status",
+    "autoRefresh": "Live updates",
+    "autoRefreshHint": "This page checks for updates automatically.",
+    "reconnecting": "Reconnecting",
+    "statusOffline": "Status is temporarily unavailable. We’ll keep trying.",
+    "lastChecked": "Updated",
+    "whatsapp": "Share order on WhatsApp",
+    "whatsappGreeting": "Hello Classic Shawarma, I’m following up on my order.",
+    "customer": "Customer",
+    "phone": "Phone",
+    "deliveryAddress": "Delivery address",
+    "orderNotes": "Notes",
+    "cashDelivery": "Cash on delivery",
+    "cashPickup": "Cash on pickup",
+    "paymentPending": "Payment due"
+  },
+  "footer": {
+    "rights": "All rights reserved."
+  },
+  "invalidQr": {
+    "title": "Invalid QR code",
+    "body": "This QR link does not match Classic Shawarma."
+  },
+  "status": {
+    "pending": "Pending",
+    "confirmed": "Confirmed",
+    "preparing": "Preparing",
+    "ready": "Ready",
+    "out_for_delivery": "Out for delivery",
+    "completed": "Completed",
+    "cancelled": "Cancelled"
+  }
+}
