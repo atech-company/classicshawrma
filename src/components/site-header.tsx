@@ -43,9 +43,13 @@ export function SiteHeader() {
           <Link href="/categories" className={cn("header-nav-link header-categories-link hidden lg:inline-flex", linkClass("/categories"))}>
             {locale === "ar" ? "الأصناف" : "Categories"}
           </Link>
-          <Link href="/cart" aria-label={t("cart")} className={cn("header-cart-link", linkClass("/cart"), "relative inline-flex items-center gap-1.5")}>
-            <ShoppingBag className="h-[18px] w-[18px]" />
-            <span className="hidden md:inline">{t("cart")}</span>
+          <Link
+            href="/cart"
+            aria-label={count > 0 ? `${t("cart")}, ${count}` : t("cart")}
+            className={cn("header-cart-link", linkClass("/cart"), "relative inline-flex items-center justify-center gap-2")}
+          >
+            <ShoppingBag aria-hidden="true" className="h-[18px] w-[18px] shrink-0" />
+            <span className="header-cart-label hidden lg:inline">{t("cart")}</span>
             {count > 0 && (
               <span className="header-cart-count absolute -end-2 -top-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-semibold text-white shadow-sm">
                 {count}
