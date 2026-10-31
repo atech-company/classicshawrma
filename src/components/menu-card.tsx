@@ -2,7 +2,7 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Sparkles } from "lucide-react";
 import Image from "next/image";
 import type { MenuItem } from "@/lib/types";
 import { brand } from "@/lib/brand";
@@ -47,7 +47,7 @@ export function MenuCard({
             />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-[#25160e]/35 via-transparent to-white/5 opacity-80 transition-opacity group-hover:opacity-55" />
-          {item.is_featured && <span className="absolute start-4 top-4 rounded-full border border-white/30 bg-black/20 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[.12em] text-white shadow-sm backdrop-blur-xl">{locale === "ar" ? "من قائمتنا" : "FROM OUR MENU"}</span>}
+          {item.is_featured && <span className="featured-menu-badge absolute start-4 top-4 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[.12em] text-white shadow-sm backdrop-blur-xl"><Sparkles aria-hidden="true" className="h-3 w-3 text-[#ffd77f]" />{locale === "ar" ? "اختيارنا المميز" : "HOUSE FAVORITE"}</span>}
           {!item.is_available && <span className="absolute end-4 top-4 rounded-full bg-black/60 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-white backdrop-blur-xl">{t("unavailable")}</span>}
         </div>
       </Link>

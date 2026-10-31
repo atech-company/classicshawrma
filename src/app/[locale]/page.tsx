@@ -1,14 +1,16 @@
-import { ArrowDown, ArrowUpLeft, ArrowUpRight, MapPin, PhoneCall, Search, Sparkles, Utensils } from "lucide-react";
+import { ArrowDown, ArrowUpLeft, ArrowUpRight, Bike, Clock3, Facebook, MapPin, MessageCircle, MessageSquareQuote, PhoneCall, Search, Sparkles, Star, Store, Utensils } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { HomeQuickAdd } from "@/components/home-quick-add";
+import { MenuCard } from "@/components/menu-card";
 import { MenuDisplayControls } from "@/components/menu-display-controls";
 import { brand } from "@/lib/brand";
 import { api } from "@/lib/api";
 import { demoBrand, demoCategories, demoMenuItems, demoRestaurant, withCatalogMenuItem, withCatalogRestaurant } from "@/lib/demo-data";
 import { formatMoney, localized } from "@/lib/utils";
+import { whatsappUrl } from "@/lib/whatsapp";
 import type { Category, MenuItem } from "@/lib/types";
 
 export default async function HomePage({
@@ -48,10 +50,31 @@ export default async function HomePage({
   const address = localized(restaurant, locale, "address");
   const Arrow = isArabic ? ArrowUpLeft : ArrowUpRight;
   const featuredDish = menuItems.find((item) => item.image_url) ?? demoMenuItems[0];
-  const heroSlides = menuItems.filter((item) => item.image_url).slice(0, 6).map((item) => ({
+  const heroPhotoBuckets = new Map<number, MenuItem[]>();
+  for (const item of menuItems.filter((candidate) => candidate.image_url)) {
+    const categoryId = item.category?.id ?? item.category_id;
+    heroPhotoBuckets.set(categoryId, [...(heroPhotoBuckets.get(categoryId) ?? []), item]);
+  }
+  const heroSlideItems: MenuItem[] = [];
+  for (let round = 0; heroSlideItems.length < 8; round += 1) {
+    const nextRound = Array.from(heroPhotoBuckets.values()).map((bucket) => bucket[round]).filter((item): item is MenuItem => Boolean(item));
+    if (nextRound.length === 0) break;
+    heroSlideItems.push(...nextRound);
+  }
+  const heroSlides = heroSlideItems.slice(0, 8).map((item) => ({
     src: item.image_url!,
     alt: localized(item, locale, "name"),
+    caption: localized(item, locale, "name"),
+    category: localized(item.category ?? categories.find((category) => category.id === item.category_id) ?? demoCategories[0], locale, "name"),
   }));
+  const todayKey = new Intl.DateTimeFormat("en-US", { weekday: "long", timeZone: "Asia/Beirut" })
+    .format(new Date())
+    .toLowerCase();
+  const todayName = new Intl.DateTimeFormat(locale, { weekday: "long", timeZone: "Asia/Beirut" }).format(new Date());
+  const todayHours = restaurant.hours?.[todayKey]?.trim();
+  const featuredPicks = menuItems.filter((item) => item.is_featured && item.is_available).slice(0, 4);
+  const proteinPick = menuItems.find((item) => item.is_available && /protein|بروتين/i.test(`${item.name_en} ${item.name_ar}`));
+  const googleReviewsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([restaurant.name_en, address, restaurant.phone].filter(Boolean).join(" "))}`;
   const searchTerm = query.toLocaleLowerCase(locale);
   const filteredItems = query
     ? menuItems.filter((item) => {
@@ -82,7 +105,12 @@ export default async function HomePage({
     <div className="homepage-shell overflow-hidden">
       <section className="hero-stage relative isolate overflow-hidden">
         <div className="hero-photo absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("${restaurant.hero_image_url || demoRestaurant.hero_image_url}")` }} />
-        <HeroSlideshow images={heroSlides} label={isArabic ? "صور من قائمة المطعم" : "Classic Shawarma food photos"} />
+        <HeroSlideshow
+          images={heroSlides}
+          label={isArabic ? "صور أطباق كلاسيك شاورما من فئات متعددة" : "Classic Shawarma dishes from across the menu"}
+          socialHref={restaurant.facebook_url || brand.facebook}
+          socialLabel={isArabic ? "تابعونا على Facebook · #استعملو" : "FOLLOW OUR LEBANON STORIES · #ISTA3MILO"}
+        />
         <div className="hero-wash absolute inset-0" />
         <div className="hero-grain absolute inset-0" />
         <div className="hero-orb hero-orb-one pointer-events-none absolute -end-28 top-32 h-80 w-80 rounded-full bg-orange-400/25 blur-[110px]" />
@@ -107,6 +135,15 @@ export default async function HomePage({
               </a>
               {restaurant.phone && <a href={`tel:${restaurant.phone}`} dir="ltr" className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/[0.08] px-5 py-3.5 text-sm font-semibold text-white/90 backdrop-blur-xl transition hover:bg-white/[0.15]"><PhoneCall className="h-4 w-4" />{isArabic ? "اتصل للطلب" : "Call to order"}</a>}
             </div>
+
+            {proteinPick && <Link href={`/menu/${proteinPick.slug}`} className="hero-social-spotlight group mt-4 inline-flex max-w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-start transition hover:-translate-y-0.5 sm:px-4" dir={isArabic ? "rtl" : "ltr"}>
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#e6ad45] text-[#2b1a13]"><Sparkles className="h-4 w-4" /></span>
+              <span className="min-w-0">
+                <span className="block text-[9px] font-extrabold uppercase tracking-[.13em] text-[#ffd77f]">{isArabic ? "من منشوراتنا · #استعملو" : "FROM OUR LEBANON FEED · #ISTA3MILO"}</span>
+                <span className="mt-0.5 block truncate text-xs font-bold text-white sm:text-sm">{isArabic ? "اختيار غني بالبروتين" : "High-protein pick"} · {localized(proteinPick, locale, "name")}</span>
+              </span>
+              <Arrow className="ms-1 h-4 w-4 shrink-0 text-white/75 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </Link>}
 
             <div className="mt-9 flex flex-wrap items-center gap-x-5 gap-y-3 text-xs text-white/75">
               <span className="flex items-center gap-2"><Utensils className="h-3.5 w-3.5 text-amber-300" />{isArabic ? `${categories.length} فئة` : `${categories.length} categories`}</span>
@@ -141,6 +178,56 @@ export default async function HomePage({
           ))}
         </div>
       </section>
+
+      <section className="mx-auto max-w-7xl px-5 pt-8 md:px-10 md:pt-12" aria-label={isArabic ? "معلومات الطلب" : "Ordering information"}>
+        <div className="service-info-panel grid gap-3 rounded-[1.6rem] border border-white/80 bg-white/55 p-3 shadow-[0_14px_36px_rgba(64,42,24,.06)] backdrop-blur-xl sm:grid-cols-2 sm:p-4 lg:grid-cols-[1.2fr_1fr_auto] lg:items-center">
+          <div className="flex min-w-0 items-center gap-3 rounded-[1.1rem] px-2 py-1.5">
+            <span className="service-info-icon flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#f6e8cd] text-[#a86c1f]"><Clock3 className="h-5 w-5" /></span>
+            <div className="min-w-0">
+              <p className="text-[10px] font-extrabold uppercase tracking-[.15em] text-muted">{t("today", { day: todayName })}</p>
+              <p className="mt-1 truncate text-sm font-bold text-foreground">{todayHours || t("hoursUnavailable")}</p>
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center gap-2 px-2 py-1.5">
+            {restaurant.delivery_enabled && <span className="service-availability"><Bike aria-hidden="true" className="h-4 w-4" />{t("deliveryAvailable")}</span>}
+            {restaurant.takeaway_enabled && <span className="service-availability"><Store aria-hidden="true" className="h-4 w-4" />{t("pickupAvailable")}</span>}
+          </div>
+          {restaurant.phone && <a href={whatsappUrl(restaurant.phone, isArabic ? "مرحباً، أريد الاستفسار عن الطلب." : "Hello, I have a question about ordering.")} target="_blank" rel="noreferrer" className="service-whatsapp inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2.5 text-xs font-extrabold transition hover:-translate-y-0.5"><MessageCircle className="h-4 w-4" />{t("whatsappContact")}</a>}
+        </div>
+      </section>
+
+      {!query && featuredPicks.length > 0 && <section className="mx-auto max-w-7xl px-5 pt-14 md:px-10 md:pt-20" aria-labelledby="featured-picks-title">
+        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between" dir={isArabic ? "rtl" : "ltr"}>
+          <div>
+            <p className="mb-2 flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[.22em] text-accent"><Sparkles className="h-3.5 w-3.5 text-[#bd842e]" />{t("featuredEyebrow")}</p>
+            <h2 id="featured-picks-title" className="font-display text-3xl tracking-tight sm:text-4xl">{t("featuredTitle")}</h2>
+            <p className="mt-2 text-sm text-muted">{t("featuredSubtitle")}</p>
+          </div>
+          <Link href="/menu?filter=featured" className="inline-flex min-h-10 w-fit items-center gap-2 rounded-full border border-accent/20 bg-white/70 px-4 py-2 text-xs font-bold text-accent shadow-sm transition hover:-translate-y-0.5 hover:border-accent/40 hover:bg-white">{tn("menu")}<Arrow className="h-3.5 w-3.5" /></Link>
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {featuredPicks.map((item) => <MenuCard key={item.id} item={item} currency={restaurant.currency} decimals={restaurant.currency_decimals} />)}
+        </div>
+      </section>}
+
+      {!query && <section className="mx-auto max-w-7xl px-5 pt-12 md:px-10 md:pt-16" aria-labelledby="guest-reviews-title">
+        <div className="guest-reviews-panel grid gap-6 overflow-hidden rounded-[2rem] border border-white/80 p-6 shadow-[0_18px_50px_rgba(66,43,25,.075)] sm:p-8 lg:grid-cols-[1fr_.9fr] lg:items-center lg:p-10" dir={isArabic ? "rtl" : "ltr"}>
+          <div>
+            <p className="mb-3 flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[.22em] text-accent"><MessageSquareQuote className="h-4 w-4 text-[#bd842e]" />{t("reviewsEyebrow")}</p>
+            <h2 id="guest-reviews-title" className="font-display text-3xl tracking-tight sm:text-4xl">{t("reviewsTitle")}</h2>
+            <p className="mt-3 max-w-xl text-sm leading-6 text-muted">{t("reviewsSubtitle")}</p>
+          </div>
+          <div className="guest-reviews-card rounded-[1.5rem] border border-white/75 bg-white/70 p-5 shadow-[0_12px_32px_rgba(49,31,18,.07)] sm:p-6">
+            <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-[#f6e8cd] text-[#a86c1f]"><Star className="h-5 w-5 fill-current" /></div>
+            <p className="text-sm font-bold text-foreground">{isArabic ? "آراء حقيقية من Google وFacebook" : "Real feedback on Google and Facebook"}</p>
+            <p className="mt-1 text-xs leading-5 text-muted">{t("reviewsPrompt")}</p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              <a href={googleReviewsUrl} target="_blank" rel="noreferrer" className="guest-review-link guest-review-link-primary inline-flex min-h-11 items-center gap-2 rounded-full px-4 py-2.5 text-xs font-extrabold transition hover:-translate-y-0.5"><Star className="h-4 w-4" />{t("googleReviews")}<Arrow className="h-3.5 w-3.5" /></a>
+              {(restaurant.facebook_url || brand.facebook) && <a href={restaurant.facebook_url || brand.facebook} target="_blank" rel="noreferrer" className="guest-review-link inline-flex min-h-11 items-center gap-2 rounded-full px-4 py-2.5 text-xs font-extrabold transition hover:-translate-y-0.5"><Facebook className="h-4 w-4" />{t("facebookReviews")}<Arrow className="h-3.5 w-3.5" /></a>}
+            </div>
+          </div>
+        </div>
+      </section>}
 
       <section id="categories" className="category-showcase mx-auto max-w-7xl px-5 pb-5 pt-16 md:px-10 md:pt-24">
         <div className="mb-7 flex items-end justify-between gap-4" dir={isArabic ? "rtl" : "ltr"}>
