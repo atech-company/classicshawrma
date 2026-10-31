@@ -69,25 +69,34 @@ export default async function HomePage({
       ? item.category.slug === category.slug
       : item.category_id === category.id),
   })).filter((group) => !query || group.items.length > 0);
+  const categoryShowcase = menuGroups
+    .map(({ category, items }) => ({
+      category,
+      items,
+      image: items.find((item) => item.image_url)?.image_url,
+    }))
+    .sort((a, b) => b.items.length - a.items.length)
+    .slice(0, 6);
 
   return (
-    <div className="overflow-hidden">
+    <div className="homepage-shell overflow-hidden">
       <section className="hero-stage relative isolate overflow-hidden">
         <div className="hero-photo absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("${restaurant.hero_image_url || demoRestaurant.hero_image_url}")` }} />
         <HeroSlideshow images={heroSlides} label={isArabic ? "صور من قائمة المطعم" : "Classic Shawarma food photos"} />
         <div className="hero-wash absolute inset-0" />
         <div className="hero-grain absolute inset-0" />
-        <div className="pointer-events-none absolute -end-28 top-32 h-80 w-80 rounded-full bg-orange-400/20 blur-[110px]" />
+        <div className="hero-orb hero-orb-one pointer-events-none absolute -end-28 top-32 h-80 w-80 rounded-full bg-orange-400/25 blur-[110px]" />
+        <div className="hero-orb hero-orb-two pointer-events-none absolute -start-24 bottom-0 h-72 w-72 rounded-full bg-[#e9a15d]/15 blur-[100px]" />
 
         <div className="relative mx-auto grid min-h-[650px] max-w-7xl items-center gap-12 px-5 pb-16 pt-28 text-white md:px-10 lg:min-h-[680px] lg:grid-cols-[1fr_.8fr]">
           <div className="relative z-10 max-w-2xl" dir={isArabic ? "rtl" : "ltr"}>
-            <div className="glass-pill mb-6 inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold tracking-wide text-white/90 animate-[fadeUp_0.7s_ease_both]">
+            <div className="hero-kicker glass-pill mb-6 inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold tracking-wide text-white/90 animate-[fadeUp_0.7s_ease_both]">
               <Sparkles className="h-3.5 w-3.5 text-amber-300" />
               <span>{demoBrand.tagline}</span>
               <span className="mx-1 h-1 w-1 rounded-full bg-white/50" />
               <span>{isArabic ? "الحازمية، لبنان" : "Hazmieh, Lebanon"}</span>
             </div>
-            <h1 className="max-w-2xl font-display text-5xl leading-[1.05] tracking-[-0.045em] drop-shadow-lg animate-[fadeUp_0.8s_ease_both] md:text-7xl lg:text-[82px]">
+            <h1 className="hero-title max-w-2xl font-display text-5xl leading-[1.05] tracking-[-0.045em] drop-shadow-lg animate-[fadeUp_0.8s_ease_both] md:text-7xl lg:text-[82px]">
               {isArabic ? <>شاورما <span className="text-[#ffd59a]">على أصولها.</span></> : <>A little Beirut<br /><span className="text-[#ffd59a]">in every bite.</span></>}
             </h1>
             <p className="mt-6 max-w-lg text-base leading-7 text-white/80 animate-[fadeUp_1s_ease_both] md:text-lg">{intro}</p>
@@ -107,7 +116,7 @@ export default async function HomePage({
           </div>
 
           <Link href={`/menu/${featuredDish.slug}`} className="hero-side-card group relative mx-auto block w-full max-w-[390px] animate-[floatIn_1.2s_cubic-bezier(.2,.75,.25,1)_both] lg:ms-auto lg:me-3">
-            <div className="relative aspect-[.88] overflow-hidden rounded-[2rem] border border-white/30 shadow-[0_30px_100px_rgba(0,0,0,.45)]">
+            <div className="hero-feature-frame relative aspect-[.88] overflow-hidden rounded-[2rem] border border-white/30 shadow-[0_30px_100px_rgba(0,0,0,.45)]">
               {featuredDish.image_url && <Image src={featuredDish.image_url} alt={localized(featuredDish, locale, "name")} fill sizes="(max-width: 1024px) 90vw, 390px" className="object-cover transition duration-700 group-hover:scale-[1.04]" priority />}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/5 to-black/10" />
               <div className="absolute start-5 top-5 rounded-full border border-white/25 bg-black/25 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[.16em] text-white backdrop-blur-xl">{isArabic ? "من قائمتنا" : "A taste of our menu"}</div>
@@ -123,12 +132,45 @@ export default async function HomePage({
         <a href="#menu-catalog" className="absolute bottom-5 start-1/2 hidden -translate-x-1/2 items-center gap-2 text-[10px] uppercase tracking-[.28em] text-white/55 transition hover:text-white md:flex"><span>{isArabic ? "اكتشف القائمة" : "DISCOVER THE MENU"}</span><ArrowDown className="h-3.5 w-3.5" /></a>
       </section>
 
+      <section className="flame-ticker" aria-label={isArabic ? "طازج من المطبخ" : "Fresh from our kitchen"}>
+        <div className="flame-ticker-track" aria-hidden="true">
+          {[0, 1].map((copy) => (
+            <div className="flame-ticker-group" key={copy}>
+              {[0, 1, 2, 3].map((item) => <span key={item}>{isArabic ? "على الفحم الطازج" : "FRESH OFF THE GRILL"}<i>✳</i>{isArabic ? "طعم بيروت الأصيل" : "A LITTLE BEIRUT IN EVERY BITE"}<i>✳</i></span>)}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section id="categories" className="category-showcase mx-auto max-w-7xl px-5 pb-5 pt-16 md:px-10 md:pt-24">
+        <div className="mb-7 flex items-end justify-between gap-4" dir={isArabic ? "rtl" : "ltr"}>
+          <div>
+            <p className="mb-2 text-[10px] font-extrabold uppercase tracking-[.24em] text-accent">{isArabic ? "اختاروا مزاجكم" : "PICK YOUR CRAVING"}</p>
+            <h2 className="font-display text-3xl tracking-tight sm:text-4xl md:text-5xl">{isArabic ? "تصفّح حسب الصنف" : "Something for every craving."}</h2>
+          </div>
+          <Link href="/menu" className="hidden shrink-0 items-center gap-2 rounded-full border border-accent/20 bg-white/70 px-4 py-2.5 text-xs font-bold text-accent shadow-sm transition hover:-translate-y-0.5 hover:bg-white sm:inline-flex">{isArabic ? "كل الأصناف" : "All categories"}<Arrow className="h-3.5 w-3.5" /></Link>
+        </div>
+        <div className="category-showcase-grid grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-6">
+          {categoryShowcase.map(({ category, items, image }, index) => (
+            <Link key={category.id} href={`#category-${category.slug}`} className="category-tile group relative isolate flex min-h-40 items-end overflow-hidden rounded-[1.3rem] border border-white/75 bg-[#291a12] shadow-[0_12px_32px_rgba(55,34,18,.1)] sm:min-h-48 lg:min-h-56" style={{ animationDelay: `${index * 70}ms` }}>
+              {image ? <Image src={image} alt="" fill sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw" loading="lazy" className="category-tile-image object-cover" /> : <Image src={brand.logo} alt="" fill sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw" loading="lazy" className="bg-white object-contain p-7" />}
+              <span className="category-tile-shade absolute inset-0" />
+              <span className="relative z-[1] w-full p-3 text-white sm:p-4" dir={isArabic ? "rtl" : "ltr"}>
+                <span className="block font-display text-lg leading-tight sm:text-xl">{localized(category, locale, "name")}</span>
+                <span className="mt-1 block text-[10px] font-semibold text-white/75">{items.length} {isArabic ? "أصناف" : "items"}</span>
+              </span>
+              <span className="category-tile-arrow absolute end-3 top-3 z-[1] flex h-8 w-8 items-center justify-center rounded-full border border-white/35 bg-black/20 text-white backdrop-blur-md transition sm:end-4 sm:top-4"><Arrow className="h-4 w-4" /></span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       <section id="menu-catalog" className="mx-auto max-w-7xl px-5 pb-20 pt-16 md:px-10 md:pb-28 md:pt-24">
         <div className="mb-8 flex flex-col justify-between gap-5 md:flex-row md:items-end" dir={isArabic ? "rtl" : "ltr"}>
           <div>
-            <p className="mb-3 text-xs font-bold uppercase tracking-[.2em] text-accent">{isArabic ? "اختاروا على ذوقكم" : "MADE FOR YOUR APPETITE"}</p>
-            <h2 className="font-display text-4xl tracking-tight md:text-5xl">{t("categories")}</h2>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-muted md:text-base">{isArabic ? "من أول لقمة لآخر رشفة، كل قائمتنا بمكان واحد." : "From the first bite to the last sip, discover the whole menu in one place."}</p>
+            <p className="mb-3 text-xs font-bold uppercase tracking-[.2em] text-accent">{isArabic ? "محضّر طازجاً كل يوم" : "FRESH FROM OUR KITCHEN"}</p>
+            <h2 className="font-display text-4xl tracking-tight md:text-5xl">{isArabic ? "القائمة كاملة" : "Shop the menu."}</h2>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-muted md:text-base">{isArabic ? "من أول لقمة لآخر رشفة، كل قائمتنا بمكان واحد." : "Find a favorite, make it yours, and add it straight to your bag."}</p>
           </div>
           <div className="flex w-full flex-col gap-3 sm:flex-row md:w-auto" dir={isArabic ? "rtl" : "ltr"}>
             <form method="get" action="" role="search" className="relative w-full md:w-72">

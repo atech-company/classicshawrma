@@ -49,12 +49,12 @@ export default async function MenuPage({
 
   return (
     <div className="mx-auto max-w-7xl px-5 py-12 md:px-10 md:py-16">
-      <div className="mb-9 rounded-[2rem] border border-white/75 bg-white/45 px-7 py-8 shadow-[0_20px_70px_rgba(72,47,28,.07)] backdrop-blur-xl md:flex md:items-end md:justify-between md:px-10 md:py-10">
+      <div className="menu-page-intro mb-9 rounded-[2rem] border border-white/75 bg-white/45 px-7 py-8 shadow-[0_20px_70px_rgba(72,47,28,.07)] backdrop-blur-xl md:flex md:items-end md:justify-between md:px-10 md:py-10">
         <div><p className="mb-3 text-xs font-bold uppercase tracking-[.2em] text-accent">{locale === "ar" ? "محضّر طازجاً كل يوم" : "FRESH FROM OUR KITCHEN"}</p><h1 className="font-display text-4xl tracking-tight md:text-5xl">{t("title")}</h1><p className="mt-3 text-sm text-muted">{locale === "ar" ? "اختاروا المفضل عندكم، ونحن نهتم بالباقي." : "Find your new favorite. We’ll take it from here."}</p></div>
         <MenuSearch initialQuery={q ?? ""} placeholder={t("search")} />
       </div>
 
-      <div className="mb-2 flex gap-2 overflow-x-auto pb-2">
+      <nav aria-label={locale === "ar" ? "تصفية الأصناف حسب الفئة" : "Filter menu by category"} className="category-filter-rail mb-2 flex gap-2 overflow-x-auto pb-2">
         <Link
           href="/menu"
           className={cn(
@@ -80,7 +80,7 @@ export default async function MenuPage({
             {localized(cat, locale, "name")}
           </Link>
         ))}
-      </div>
+      </nav>
 
       <MenuDisplayControls locale={locale}>
         {items.length === 0 ? (

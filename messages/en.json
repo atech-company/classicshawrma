@@ -50,6 +50,7 @@
     "browse": "Browse menu",
     "subtotal": "Subtotal",
     "checkout": "Checkout",
+    "whatsapp": "Order via WhatsApp",
     "remove": "Remove",
     "update": "Update"
   },
@@ -70,6 +71,8 @@
     "total": "Total",
     "place": "Place order",
     "placing": "Placing order…",
+    "whatsapp": "Order via WhatsApp",
+    "whatsappHint": "Send this order to Classic Shawarma on WhatsApp.",
     "error": "Could not place the order. Please check your details."
   },
   "order": {
@@ -88,8 +91,8 @@
     "reconnecting": "Reconnecting",
     "statusOffline": "Status is temporarily unavailable. We’ll keep trying.",
     "lastChecked": "Updated",
-    "whatsapp": "Share order on WhatsApp",
-    "whatsappGreeting": "Hello Classic Shawarma, I’m following up on my order.",
+    "whatsapp": "Send order on WhatsApp",
+    "whatsappGreeting": "Hello Classic Shawarma, I would like to place this order:",
     "customer": "Customer",
     "phone": "Phone",
     "deliveryAddress": "Delivery address",
@@ -99,7 +102,8 @@
     "paymentPending": "Payment due"
   },
   "footer": {
-    "rights": "All rights reserved."
+    "rights": "All rights reserved.",
+    "whatsapp": "WhatsApp"
   },
   "invalidQr": {
     "title": "Invalid QR code",

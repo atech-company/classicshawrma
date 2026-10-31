@@ -1,13 +1,15 @@
 "use client";
 
+import { MessageCircle } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { Link, useRouter } from "@/i18n/navigation";
 import { api } from "@/lib/api";
 import { useCart } from "@/lib/cart";
-import type { Restaurant } from "@/lib/types";
+import type { CartLine, Restaurant } from "@/lib/types";
 import { formatMoney, localized } from "@/lib/utils";
 import { demoRestaurant, withCatalogRestaurant } from "@/lib/restaurant-defaults";
+import { whatsappUrl } from "@/lib/whatsapp";
 
 export default function CheckoutPage() {
   const t = useTranslations("checkout");
@@ -45,6 +47,63 @@ export default function CheckoutPage() {
   const total = subtotal() + fees;
   const currency = restaurant?.currency ?? "LBP";
   const decimals = restaurant?.currency_decimals ?? 0;
+
+  function lineLabel(line: CartLine) {
+    const extras = [
+      locale === "ar" ? line.variant_label_ar : line.variant_label_en,
+      ...(locale === "ar" ? line.modifier_labels_ar : line.modifier_labels_en),
+      line.notes,
+    ]
+      .filter(Boolean)
+      .join(" · ");
+    const name = localized(line, locale, "name");
+    const price = formatMoney(line.unit_price * line.quantity, currency, decimals);
+    return extras
+      ? `${line.quantity}× ${name} (${extras}) — ${price}`
+      : `${line.quantity}× ${name} — ${price}`;
+  }
+
+  function buildWhatsappMessage() {
+    const typeLabel =
+      locale === "ar"
+        ? orderType === "delivery"
+          ? "توصيل"
+          : "تيك أواي"
+        : orderType === "delivery"
+          ? "Delivery"
+          : "Takeaway";
+    return [
+      locale === "ar"
+        ? "مرحباً كلاسيك شاورما، أريد تقديم هذا الطلب:"
+        : "Hello Classic Shawarma, I would like to place this order:",
+      name.trim() ? `${t("name")}: ${name.trim()}` : null,
+      phone.trim() ? `${t("phone")}: ${phone.trim()}` : null,
+      `${t("orderType")}: ${typeLabel}`,
+      orderType === "delivery" && address.trim() ? `${t("address")}: ${address.trim()}` : null,
+      deliveryNotes.trim() ? `${t("deliveryNotes")}: ${deliveryNotes.trim()}` : null,
+      "",
+      ...items.map(lineLabel),
+      "",
+      `${t("total")}: ${formatMoney(total, currency, decimals)}`,
+      `${t("payment")}: ${orderType === "delivery" ? t("cashDelivery") : t("cashPickup")}`,
+      notes.trim() ? `${t("notes")}: ${notes.trim()}` : null,
+    ]
+      .filter((line) => line !== null)
+      .join("\n");
+  }
+
+  function openWhatsApp() {
+    if (!name.trim() || !phone.trim()) {
+      setError(t("error"));
+      return;
+    }
+    if (orderType === "delivery" && !address.trim()) {
+      setError(t("error"));
+      return;
+    }
+    setError("");
+    window.open(whatsappUrl(restaurant?.phone, buildWhatsappMessage()), "_blank", "noopener,noreferrer");
+  }
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
