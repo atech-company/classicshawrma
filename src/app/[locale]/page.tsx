@@ -102,7 +102,7 @@ export default async function HomePage({
             <p className="mt-6 max-w-lg text-base leading-7 text-white/80 animate-[fadeUp_1s_ease_both] md:text-lg">{intro}</p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3 animate-[fadeUp_1.1s_ease_both]">
-              <a href="#menu-catalog" className="cta-glow group inline-flex items-center gap-3 rounded-full bg-[#c45d3a] px-6 py-3.5 text-sm font-bold text-white shadow-[0_14px_36px_rgba(196,93,58,.32)] transition hover:-translate-y-0.5 hover:bg-[#a9472c]">
+              <a href="#menu-catalog" className="cta-glow group inline-flex items-center gap-3 rounded-full bg-accent px-6 py-3.5 text-sm font-bold text-white shadow-[0_14px_36px_rgba(211,75,43,.32)] transition hover:-translate-y-0.5 hover:bg-accent-dark">
                 {isArabic ? "تصفّح القائمة" : "Explore the menu"}<Arrow className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
               </a>
               {restaurant.phone && <a href={`tel:${restaurant.phone}`} dir="ltr" className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/[0.08] px-5 py-3.5 text-sm font-semibold text-white/90 backdrop-blur-xl transition hover:bg-white/[0.15]"><PhoneCall className="h-4 w-4" />{isArabic ? "اتصل للطلب" : "Call to order"}</a>}
@@ -182,7 +182,7 @@ export default async function HomePage({
         </div>
 
         <MenuDisplayControls locale={locale}>
-        {!query && <nav aria-label={isArabic ? "فئات القائمة" : "Menu categories"} className="menu-category-rail sticky top-[76px] z-20 -mx-5 mb-12 flex gap-2 overflow-x-auto border-y border-white/60 bg-[#f6f1e9]/90 px-5 py-3 backdrop-blur-xl md:top-24 md:mx-0 md:rounded-2xl md:border md:px-4">
+        {!query && <nav aria-label={isArabic ? "فئات القائمة" : "Menu categories"} className="menu-category-rail sticky top-[76px] z-20 -mx-5 mb-12 flex gap-2 overflow-x-auto border-y border-white/60 bg-background/90 px-5 py-3 backdrop-blur-xl md:top-24 md:mx-0 md:rounded-2xl md:border md:px-4">
           {menuGroups.map(({ category, items }) => (
             <a key={category.id} href={`#category-${category.slug}`} className="shrink-0 rounded-full border border-white/80 bg-white/70 px-4 py-2 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 hover:border-accent/40 hover:text-accent">
               {localized(category, locale, "name")}<span className="ms-2 text-xs text-muted">{items.length}</span>

@@ -34,7 +34,7 @@ export function SiteFooter({
               </span>{name}
             </Link>
             <p className="mt-4 max-w-xs text-sm leading-6 text-white/55">{brand.tagline}</p>
-            <Link href="/menu" className="footer-order-link mt-5 inline-flex items-center gap-2 rounded-full bg-[#c64f2b] px-4 py-2.5 text-xs font-extrabold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-[#df6339]">{isArabic ? "اطلبوا الآن" : "Order something good"}<ArrowUpRight className="h-3.5 w-3.5" /></Link>
+            <Link href="/menu" className="footer-order-link mt-5 inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2.5 text-xs font-extrabold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-accent-dark">{isArabic ? "اطلبوا الآن" : "Order something good"}<ArrowUpRight className="h-3.5 w-3.5" /></Link>
           </div>
 
           <div>

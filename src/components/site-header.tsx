@@ -2,7 +2,7 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
-import { ArrowUpRight, ShoppingBag, Sparkles } from "lucide-react";
+import { ArrowUpRight, Flame, ShoppingBag, Sparkles } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import { brand } from "@/lib/brand";
 import { cn } from "@/lib/utils";
@@ -26,7 +26,7 @@ export function SiteHeader() {
     <header className="site-header sticky top-0 z-40 px-3 pt-3 md:px-6 md:pt-4">
       <div className="header-inner mx-auto flex max-w-7xl items-center justify-between gap-3 rounded-[1.4rem] border border-white/75 bg-[#fffdf9]/75 px-3 py-2.5 shadow-[0_8px_30px_rgba(63,43,27,.07)] backdrop-blur-2xl sm:gap-4 sm:px-4 md:px-6">
         <Link href="/" aria-label="Classic Shawarma home" className="header-brand group flex min-w-0 shrink-0 items-center gap-2.5 font-display text-base tracking-tight text-foreground md:text-lg">
-          <span className="brand-mark relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-[#c64f2b]/15 bg-white shadow-[0_7px_18px_rgba(198,79,43,.14)] transition group-hover:-rotate-3 group-hover:scale-105">
+          <span className="brand-mark relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-accent/15 bg-white shadow-[0_7px_18px_rgba(211,75,43,.16)] transition group-hover:-rotate-3 group-hover:scale-105">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={brand.logo} alt="" className="h-full w-full object-contain" />
             <span className="brand-mark-sparkle pointer-events-none absolute -end-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-white"><Sparkles className="h-2.5 w-2.5" /></span>
@@ -34,13 +34,13 @@ export function SiteHeader() {
           <span className="min-w-0 leading-tight">Classic <span className="text-accent">Shawarma</span><span className="header-brand-caption mt-0.5 block font-sans text-[9px] font-bold uppercase tracking-[.17em] text-muted">{locale === "ar" ? "مشاوي على أصولها" : "Beirut grill house"}</span></span>
         </Link>
         <nav className="header-nav flex items-center gap-1 sm:gap-2 md:gap-3">
-          <Link href="/" className={cn("header-nav-link", linkClass("/"))}>
+          <Link href="/" aria-current={pathname === "/" ? "page" : undefined} className={cn("header-nav-link", linkClass("/"))}>
             {t("home")}
           </Link>
-          <Link href="/menu" className={cn("header-nav-link", linkClass("/menu"))}>
+          <Link href="/menu" aria-current={pathname.startsWith("/menu") ? "page" : undefined} className={cn("header-nav-link", linkClass("/menu"))}>
             {t("menu")}
           </Link>
-          <Link href="/categories" className={cn("header-nav-link header-categories-link hidden lg:inline-flex", linkClass("/categories"))}>
+          <Link href="/categories" aria-current={pathname === "/categories" ? "page" : undefined} className={cn("header-nav-link header-categories-link hidden lg:inline-flex", linkClass("/categories"))}>
             {locale === "ar" ? "الأصناف" : "Categories"}
           </Link>
           <Link
@@ -56,7 +56,8 @@ export function SiteHeader() {
               </span>
             )}
           </Link>
-          <Link href="/menu" className="header-order-cta hidden items-center gap-1.5 rounded-full bg-[#c64f2b] px-4 py-2.5 text-xs font-bold text-white shadow-[0_8px_22px_rgba(198,79,43,.23)] transition hover:-translate-y-0.5 hover:bg-[#a83b20] lg:inline-flex">
+          <Link href="/menu" className="header-order-cta hidden items-center gap-1.5 rounded-full px-4 py-2.5 text-xs font-bold text-white lg:inline-flex">
+            <Flame aria-hidden="true" className="h-3.5 w-3.5 text-[#ffe1a1]" />
             {t("orderNow")}<ArrowUpRight className="h-3.5 w-3.5" />
           </Link>
           <Link
