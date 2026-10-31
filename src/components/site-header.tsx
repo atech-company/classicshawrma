@@ -25,7 +25,7 @@ export function SiteHeader() {
   return (
     <header className="site-header sticky top-0 z-40 px-3 pt-3 md:px-6 md:pt-4">
       <div className="header-inner mx-auto flex max-w-7xl items-center justify-between gap-3 rounded-[1.4rem] border border-white/75 bg-[#fffdf9]/75 px-3 py-2.5 shadow-[0_8px_30px_rgba(63,43,27,.07)] backdrop-blur-2xl sm:gap-4 sm:px-4 md:px-6">
-        <Link href="/" className="header-brand group flex min-w-0 shrink-0 items-center gap-2.5 font-display text-base tracking-tight text-foreground md:text-lg">
+        <Link href="/" aria-label="Classic Shawarma home" className="header-brand group flex min-w-0 shrink-0 items-center gap-2.5 font-display text-base tracking-tight text-foreground md:text-lg">
           <span className="brand-mark relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-[#c64f2b]/15 bg-white shadow-[0_7px_18px_rgba(198,79,43,.14)] transition group-hover:-rotate-3 group-hover:scale-105">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={brand.logo} alt="" className="h-full w-full object-contain" />

@@ -1093,7 +1093,7 @@ body {
   }
 }
 
-@media (min-width: 400px) and (max-width: 767px) {
+@media (min-width: 381px) and (max-width: 767px) {
   .header-inner {
     gap: .2rem;
     padding-inline: .55rem;
@@ -1136,6 +1136,10 @@ body {
 
 @media (min-width: 381px) and (max-width: 399px) {
   .header-nav-link:first-child {
+    display: none;
+  }
+
+  .header-brand > span:last-child {
     display: none;
   }
 }
@@ -1253,6 +1257,10 @@ body {
   }
 
   .header-categories-link {
+    display: inline-flex;
+  }
+
+  .header-brand > span:last-child {
     display: none;
   }
 
