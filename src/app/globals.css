@@ -665,6 +665,31 @@ body {
   box-shadow: 0 5px 15px rgba(55, 34, 18, .035);
 }
 
+.menu-filter-chip {
+  border-color: rgba(255, 255, 255, .82);
+  background: rgba(255, 252, 247, .7);
+  color: var(--foreground);
+  white-space: nowrap;
+}
+
+.menu-filter-chip:hover {
+  border-color: rgba(198, 79, 43, .35);
+  background: rgba(255, 255, 255, .96);
+  color: var(--accent);
+}
+
+.menu-filter-chip.is-active {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(198, 79, 43, .17);
+}
+
+.menu-filter-chip:focus-visible {
+  outline: 3px solid rgba(198, 79, 43, .28);
+  outline-offset: 2px;
+}
+
 .category-showcase-grid {
   perspective: 900px;
 }
