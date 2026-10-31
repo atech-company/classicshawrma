@@ -1,6 +1,7 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
+import { ShoppingBag } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { useCart } from "@/lib/cart";
@@ -119,7 +120,7 @@ export function AddToCartForm({
             {variants.map((v) => (
               <label
                 key={v.id}
-                className="flex cursor-pointer items-center justify-between rounded-xl border border-border bg-surface px-4 py-3"
+                className="custom-option flex cursor-pointer items-center justify-between rounded-xl border border-border bg-surface px-4 py-3"
               >
                 <span className="flex items-center gap-3">
                   <input
@@ -154,7 +155,7 @@ export function AddToCartForm({
             {group.options.map((opt) => (
               <label
                 key={opt.id}
-                className="flex cursor-pointer items-center justify-between rounded-xl border border-border bg-surface px-4 py-3"
+                className="custom-option flex cursor-pointer items-center justify-between rounded-xl border border-border bg-surface px-4 py-3"
               >
                 <span className="flex items-center gap-3">
                   <input
@@ -208,9 +209,9 @@ export function AddToCartForm({
       <button
         type="button"
         onClick={submit}
-        className="w-full rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition hover:bg-accent-dark"
+        className="add-to-cart-submit inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-bold text-white shadow-[0_12px_28px_rgba(198,79,43,.23)] transition hover:-translate-y-0.5 hover:bg-accent-dark hover:shadow-[0_16px_34px_rgba(198,79,43,.3)] active:translate-y-0 active:scale-[.99]"
       >
-        {t("add")} ·{" "}
+        <ShoppingBag className="h-4 w-4" />{t("add")} ·{" "}
         {formatMoney(
           unitPrice * quantity,
           restaurant.currency,

@@ -148,7 +148,7 @@ export default async function HomePage({
             <p className="mb-2 text-[10px] font-extrabold uppercase tracking-[.24em] text-accent">{isArabic ? "اختاروا مزاجكم" : "PICK YOUR CRAVING"}</p>
             <h2 className="font-display text-3xl tracking-tight sm:text-4xl md:text-5xl">{isArabic ? "تصفّح حسب الصنف" : "Something for every craving."}</h2>
           </div>
-          <Link href="/menu" className="hidden shrink-0 items-center gap-2 rounded-full border border-accent/20 bg-white/70 px-4 py-2.5 text-xs font-bold text-accent shadow-sm transition hover:-translate-y-0.5 hover:bg-white sm:inline-flex">{isArabic ? "كل الأصناف" : "All categories"}<Arrow className="h-3.5 w-3.5" /></Link>
+          <Link href="/categories" className="inline-flex shrink-0 items-center gap-2 rounded-full border border-accent/20 bg-white/70 px-4 py-2.5 text-xs font-bold text-accent shadow-sm transition hover:-translate-y-0.5 hover:bg-white">{isArabic ? "كل الأصناف" : "All categories"}<Arrow className="h-3.5 w-3.5" /></Link>
         </div>
         <div className="category-showcase-grid grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-6">
           {categoryShowcase.map(({ category, items, image }, index) => (

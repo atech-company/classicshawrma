@@ -40,7 +40,7 @@ export function SiteHeader() {
           <Link href="/menu" className={cn("header-nav-link", linkClass("/menu"))}>
             {t("menu")}
           </Link>
-          <Link href="/#categories" className="header-nav-link header-categories-link hidden lg:inline-flex">
+          <Link href="/categories" className={cn("header-nav-link header-categories-link hidden lg:inline-flex", linkClass("/categories"))}>
             {locale === "ar" ? "الأصناف" : "Categories"}
           </Link>
           <Link href="/cart" aria-label={t("cart")} className={cn("header-cart-link", linkClass("/cart"), "relative inline-flex items-center gap-1.5")}>
@@ -58,9 +58,12 @@ export function SiteHeader() {
           <Link
             href={pathname || "/"}
             locale={other}
+            aria-label={t("language")}
+            title={t("language")}
             className="header-language rounded-full border border-border/80 bg-white/60 px-3 py-2 text-[11px] font-bold text-muted transition hover:border-accent hover:text-accent"
           >
-            {t("language")}
+            <span className="header-language-full">{t("language")}</span>
+            <span className="header-language-short" aria-hidden="true">{locale === "ar" ? "EN" : "AR"}</span>
           </Link>
         </nav>
       </div>
