@@ -114,15 +114,15 @@ export default function AdminSettingsPage() {
   if (loading) {
     return (
       <AdminShell>
-        <p className="text-sm text-[#6b645c]">Loading settings…</p>
+        <p className="text-sm text-muted">Loading settings…</p>
       </AdminShell>
     );
   }
 
   return (
     <AdminShell>
-      <h1 className="font-display text-3xl">Restaurant settings</h1>
-      <p className="mt-1 text-sm text-[#6b645c]">
+      <h1 className="font-display text-3xl tracking-tight">Restaurant settings</h1>
+      <p className="mt-1 text-sm text-muted">
         Contact, hours, fees, and hero image shown on the customer site.
       </p>
 
@@ -173,7 +173,7 @@ export default function AdminSettingsPage() {
           <select
             value={defaultLocale}
             onChange={(e) => setDefaultLocale(e.target.value)}
-            className="rounded-xl border border-border px-3 py-2 text-sm"
+            className="admin-select"
           >
             <option value="ar">Default locale: Arabic</option>
             <option value="en">Default locale: English</option>
@@ -182,7 +182,7 @@ export default function AdminSettingsPage() {
 
         <Card className="grid gap-3 p-5 md:grid-cols-2">
           <h2 className="md:col-span-2 font-semibold">Opening hours</h2>
-          <p className="md:col-span-2 text-sm text-[#6b645c]">
+          <p className="md:col-span-2 text-sm text-muted">
             Leave blank to hide hours on the site. Example: 12:00 – 00:00
           </p>
           {DAY_KEYS.map((day) => (

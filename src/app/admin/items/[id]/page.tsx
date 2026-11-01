@@ -113,23 +113,23 @@ export default function AdminEditItemPage() {
   if (!item) {
     return (
       <AdminShell>
-        <p className="text-sm text-[#6b645c]">Loading item…</p>
+        <p className="text-sm text-muted">Loading item…</p>
       </AdminShell>
     );
   }
 
   return (
     <AdminShell>
-      <h1 className="font-display text-3xl">Edit item</h1>
+      <h1 className="font-display text-3xl tracking-tight">Edit item</h1>
       <form
         onSubmit={onSubmit}
-        className="mt-6 grid max-w-4xl gap-3 rounded-2xl border border-[#e4ddd3] bg-white p-5 md:grid-cols-2"
+        className="admin-card mt-6 grid max-w-4xl gap-3 p-5 md:grid-cols-2"
       >
         <select
           required
           value={categoryId}
           onChange={(e) => setCategoryId(e.target.value)}
-          className="rounded-xl border border-[#e4ddd3] px-3 py-2 text-sm md:col-span-2"
+          className="admin-select md:col-span-2"
         >
           {categories.map((c) => (
             <option key={c.id} value={c.id}>
@@ -142,7 +142,7 @@ export default function AdminEditItemPage() {
         <Textarea value={descriptionEn} onChange={(e) => setDescriptionEn(e.target.value)} />
         <Textarea value={descriptionAr} onChange={(e) => setDescriptionAr(e.target.value)} dir="rtl" />
         <Input required type="number" value={price} onChange={(e) => setPrice(e.target.value)} />
-        <label className="grid gap-1 text-sm text-[#6b645c]">
+        <label className="grid gap-1 text-sm text-muted">
           Display order within category
           <Input type="number" min={0} value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} />
         </label>

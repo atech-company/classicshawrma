@@ -79,25 +79,25 @@ export default function AdminNewItemPage() {
 
   return (
     <AdminShell>
-      <Link href="/admin/items" className="text-sm font-semibold text-[#c45c26] hover:underline">
+      <Link href="/admin/items" className="admin-link text-sm hover:underline">
         ← Back to items
       </Link>
       <div className="mt-3">
-        <h1 className="font-display text-3xl">Add menu item</h1>
-        <p className="mt-1 text-sm text-[#6b645c]">Create a new item for the restaurant menu.</p>
+        <h1 className="font-display text-3xl tracking-tight">Add menu item</h1>
+        <p className="mt-1 text-sm text-muted">Create a new item for the restaurant menu.</p>
       </div>
 
       <form
         onSubmit={onSubmit}
-        className="mt-6 grid max-w-4xl gap-3 rounded-2xl border border-[#e4ddd3] bg-white p-5 md:grid-cols-2"
+        className="admin-card mt-6 grid max-w-4xl gap-3 p-5 md:grid-cols-2"
       >
-        <label className="grid gap-1 text-sm text-[#6b645c] md:col-span-2">
+        <label className="grid gap-1 text-sm text-muted md:col-span-2">
           Category
           <select
             required
             value={categoryId}
             onChange={(event) => setCategoryId(event.target.value)}
-            className="rounded-xl border border-[#e4ddd3] px-3 py-2 text-sm text-[#211d19]"
+            className="admin-select"
           >
             <option value="">Select category</option>
             {categories.map((category) => (
@@ -109,15 +109,15 @@ export default function AdminNewItemPage() {
         <Input required placeholder="Name (AR)" value={nameAr} onChange={(event) => setNameAr(event.target.value)} dir="rtl" />
         <Textarea placeholder="Description (EN)" value={descriptionEn} onChange={(event) => setDescriptionEn(event.target.value)} />
         <Textarea placeholder="Description (AR)" value={descriptionAr} onChange={(event) => setDescriptionAr(event.target.value)} dir="rtl" />
-        <label className="grid gap-1 text-sm text-[#6b645c]">
+        <label className="grid gap-1 text-sm text-muted">
           Price (integer)
           <Input required type="number" min={0} value={price} onChange={(event) => setPrice(event.target.value)} />
         </label>
-        <label className="grid gap-1 text-sm text-[#6b645c]">
+        <label className="grid gap-1 text-sm text-muted">
           Display order in category (optional)
           <Input type="number" min={0} placeholder="Add to end automatically" value={sortOrder} onChange={(event) => setSortOrder(event.target.value)} />
         </label>
-        <label className="grid gap-1 text-sm text-[#6b645c] md:col-span-2">
+        <label className="grid gap-1 text-sm text-muted md:col-span-2">
           Item photo (optional)
           <Input type="file" accept="image/*" onChange={(event) => setImage(event.target.files?.[0] ?? null)} />
         </label>
@@ -138,7 +138,7 @@ export default function AdminNewItemPage() {
         />
 
         {categoriesLoaded && categories.length === 0 && (
-          <p className="text-sm text-[#6b645c] md:col-span-2">
+          <p className="text-sm text-muted md:col-span-2">
             Create a category before adding menu items.
           </p>
         )}

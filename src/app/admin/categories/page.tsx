@@ -111,10 +111,10 @@ export default function AdminCategoriesPage() {
 
   return (
     <AdminShell>
-      <h1 className="font-display text-3xl">Categories</h1>
+      <h1 className="font-display text-3xl tracking-tight">Categories</h1>
       <form
         onSubmit={onSubmit}
-        className="mt-6 grid gap-3 rounded-2xl border border-[#e4ddd3] bg-white p-5 md:grid-cols-2"
+        className="admin-card mt-6 grid gap-3 p-5 md:grid-cols-2"
       >
         <h2 className="md:col-span-2 font-semibold">
           {editing ? `Edit ${editing.name_en}` : "New category"}
@@ -168,29 +168,29 @@ export default function AdminCategoriesPage() {
         {message && <p className="md:col-span-2 text-sm text-green-700">{message}</p>}
       </form>
 
-      <div className="mt-8 overflow-x-auto rounded-2xl border border-[#e4ddd3] bg-white">
-        <table className="min-w-full text-sm">
-          <thead className="bg-[#f6f3ee] text-left">
+      <div className="admin-table-wrap mt-8">
+        <table className="admin-table">
+          <thead>
             <tr>
-              <th className="px-4 py-3">Order</th>
-              <th className="px-4 py-3">Name</th>
-              <th className="px-4 py-3">Slug</th>
-              <th className="px-4 py-3">Items</th>
-              <th className="px-4 py-3">Status</th>
-              <th className="px-4 py-3">Actions</th>
+              <th>Order</th>
+              <th>Name</th>
+              <th>Slug</th>
+              <th>Items</th>
+              <th>Status</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {categories.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-[#6b645c]">
+                <td colSpan={6} className="px-4 py-8 text-center text-muted">
                   No categories yet. Create your first one above.
                 </td>
               </tr>
             ) : (
               categories.map((cat, index) => (
-                <tr key={cat.id} className="border-t border-[#e4ddd3]">
-                  <td className="px-4 py-3">
+                <tr key={cat.id}>
+                  <td>
                     <div className="flex gap-1">
                       <Button
                         type="button"
@@ -212,22 +212,22 @@ export default function AdminCategoriesPage() {
                       </Button>
                     </div>
                   </td>
-                  <td className="px-4 py-3">
+                  <td>
                     <div>{cat.name_en}</div>
-                    <div className="text-[#6b645c]" dir="rtl">
+                    <div className="text-muted" dir="rtl">
                       {cat.name_ar}
                     </div>
                   </td>
-                  <td className="px-4 py-3">{cat.slug}</td>
-                  <td className="px-4 py-3">{cat.items_count ?? 0}</td>
-                  <td className="px-4 py-3">
+                  <td>{cat.slug}</td>
+                  <td>{cat.items_count ?? 0}</td>
+                  <td>
                     {cat.is_active ? "Active" : "Inactive"}
                   </td>
-                  <td className="px-4 py-3 space-x-2">
-                    <button type="button" onClick={() => startEdit(cat)} className="text-[#c45c26]">
+                  <td className="space-x-2">
+                    <button type="button" onClick={() => startEdit(cat)} className="admin-link">
                       Edit
                     </button>
-                    <button type="button" onClick={() => toggleActive(cat)} className="text-[#6b645c]">
+                    <button type="button" onClick={() => toggleActive(cat)} className="text-muted">
                       {cat.is_active ? "Deactivate" : "Activate"}
                     </button>
                     <button type="button" onClick={() => remove(cat)} className="text-red-700">

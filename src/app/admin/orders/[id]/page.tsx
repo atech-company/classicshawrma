@@ -58,7 +58,7 @@ export default function AdminOrderDetailPage() {
   if (!order) {
     return (
       <AdminShell>
-        <p className="text-sm text-[#6b645c]">Loading order…</p>
+        <p className="text-sm text-muted">Loading order…</p>
       </AdminShell>
     );
   }
@@ -69,22 +69,22 @@ export default function AdminOrderDetailPage() {
     <AdminShell>
       <div className="flex flex-wrap items-start justify-between gap-3 print:block">
         <div>
-          <h1 className="font-display text-3xl">{order.order_number}</h1>
-          <p className="mt-1 text-sm capitalize text-[#6b645c]">
+          <h1 className="font-display text-3xl tracking-tight">{order.order_number}</h1>
+          <p className="mt-1 text-sm capitalize text-muted">
             {order.status.replaceAll("_", " ")} · {order.order_type}
           </p>
         </div>
         <button
           type="button"
           onClick={printReceipt}
-          className="rounded-full border border-[#e4ddd3] bg-white px-4 py-2 text-sm print:hidden"
+          className="rounded-full border border-border bg-surface px-4 py-2 text-sm font-semibold print:hidden"
         >
           Print receipt
         </button>
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
-        <section className="rounded-2xl border border-[#e4ddd3] bg-white p-5 text-sm">
+        <section className="admin-card p-5 text-sm">
           <h2 className="font-semibold">Customer</h2>
           <p className="mt-2">{order.customer_name}</p>
           <p dir="ltr">{order.customer_phone}</p>
@@ -92,14 +92,14 @@ export default function AdminOrderDetailPage() {
             <p className="mt-2">{order.delivery_address}</p>
           )}
           {order.delivery_instructions && (
-            <p className="mt-1 text-[#6b645c]">{order.delivery_instructions}</p>
+            <p className="mt-1 text-muted">{order.delivery_instructions}</p>
           )}
           {order.customer_notes && (
             <p className="mt-2">Notes: {order.customer_notes}</p>
           )}
         </section>
 
-        <section className="rounded-2xl border border-[#e4ddd3] bg-white p-5 text-sm">
+        <section className="admin-card p-5 text-sm">
           <h2 className="font-semibold">Payment</h2>
           <p className="mt-2">
             {order.payment_method} · {order.payment_status}
@@ -112,17 +112,17 @@ export default function AdminOrderDetailPage() {
         </section>
       </div>
 
-      <section className="mt-6 rounded-2xl border border-[#e4ddd3] bg-white p-5">
+      <section className="admin-card mt-6 p-5">
         <h2 className="font-semibold">Items</h2>
         <ul className="mt-3 space-y-2 text-sm">
           {(order.items ?? []).map((item) => (
-            <li key={item.id} className="flex justify-between gap-3 border-b border-[#f0ebe3] py-2">
+            <li key={item.id} className="flex justify-between gap-3 border-b border-border py-2 last:border-0">
               <div>
                 <p>
                   {item.quantity}× {item.item_name_en}
                 </p>
                 {item.notes && (
-                  <p className="text-[#6b645c]">{item.notes}</p>
+                  <p className="text-muted">{item.notes}</p>
                 )}
               </div>
               <p>{formatMoney(item.line_total, "LBP", 0)}</p>
@@ -131,7 +131,7 @@ export default function AdminOrderDetailPage() {
         </ul>
       </section>
 
-      <section className="mt-6 rounded-2xl border border-[#e4ddd3] bg-white p-5 print:hidden">
+      <section className="admin-card mt-6 p-5 print:hidden">
         <h2 className="font-semibold">Update status</h2>
         <div className="mt-3 flex flex-wrap gap-2">
           {transitions.map((status) => (
@@ -139,7 +139,7 @@ export default function AdminOrderDetailPage() {
               key={status}
               type="button"
               onClick={() => updateStatus(status)}
-              className="rounded-full bg-[#c45c26] px-4 py-2 text-sm font-semibold capitalize text-white"
+              className="admin-btn-primary capitalize"
             >
               {status.replaceAll("_", " ")}
             </button>
@@ -150,7 +150,7 @@ export default function AdminOrderDetailPage() {
             value={cancelReason}
             onChange={(e) => setCancelReason(e.target.value)}
             placeholder="Cancel reason"
-            className="mt-3 w-full max-w-md rounded-xl border border-[#e4ddd3] px-3 py-2 text-sm"
+            className="admin-input mt-3 max-w-md"
           />
         )}
         {error && <p className="mt-2 text-sm text-red-700">{error}</p>}

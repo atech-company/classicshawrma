@@ -41,23 +41,20 @@ export default function AdminDashboardPage() {
 
   return (
     <AdminShell>
-      <h1 className="font-display text-3xl">Dashboard</h1>
-      <p className="mt-1 text-sm text-[#6b645c]">
+      <h1 className="font-display text-3xl tracking-tight">Dashboard</h1>
+      <p className="mt-1 text-sm text-muted">
         Live stats refresh every 15 seconds.
       </p>
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {cards.map((card) => (
-          <div
-            key={card.label}
-            className="rounded-2xl border border-[#e4ddd3] bg-white p-5"
-          >
-            <p className="text-sm text-[#6b645c]">{card.label}</p>
+          <div key={card.label} className="admin-card p-5">
+            <p className="text-sm text-muted">{card.label}</p>
             <p className="mt-2 font-display text-3xl">{card.value}</p>
           </div>
         ))}
       </div>
       {!stats && (
-        <p className="mt-6 text-sm text-[#6b645c]">Loading metrics…</p>
+        <p className="mt-6 text-sm text-muted">Loading metrics…</p>
       )}
     </AdminShell>
   );

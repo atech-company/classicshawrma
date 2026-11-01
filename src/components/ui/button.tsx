@@ -18,7 +18,7 @@ export function Button({
         "inline-flex items-center justify-center rounded-full text-sm font-semibold transition disabled:opacity-60",
         variant === "default" && "bg-accent text-white hover:bg-accent-dark",
         variant === "outline" && "border border-border bg-surface hover:border-accent",
-        variant === "ghost" && "hover:bg-[#f6f3ee]",
+        variant === "ghost" && "hover:bg-background",
         variant === "destructive" && "bg-red-700 text-white hover:bg-red-800",
         size === "default" && "px-5 py-2.5",
         size === "sm" && "px-3 py-1.5 text-xs",

@@ -33,20 +33,20 @@ export default function AdminOrdersPage() {
 
   return (
     <AdminShell>
-      <h1 className="font-display text-3xl">Orders</h1>
-      <p className="mt-1 text-sm text-[#6b645c]">Auto-refreshes every 10 seconds.</p>
+      <h1 className="font-display text-3xl tracking-tight">Orders</h1>
+      <p className="mt-1 text-sm text-muted">Auto-refreshes every 10 seconds.</p>
 
-      <div className="mt-6 flex flex-wrap gap-2">
+      <div className="admin-card mt-6 flex flex-wrap gap-2 p-4">
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Search number or phone"
-          className="rounded-xl border border-[#e4ddd3] px-3 py-2 text-sm"
+          className="admin-input max-w-xs"
         />
         <select
           value={status}
           onChange={(e) => setStatus(e.target.value)}
-          className="rounded-xl border border-[#e4ddd3] px-3 py-2 text-sm"
+          className="admin-select max-w-[12rem]"
         >
           <option value="">All statuses</option>
           {[
@@ -66,7 +66,7 @@ export default function AdminOrdersPage() {
         <select
           value={orderType}
           onChange={(e) => setOrderType(e.target.value)}
-          className="rounded-xl border border-[#e4ddd3] px-3 py-2 text-sm"
+          className="admin-select max-w-[11rem]"
         >
           <option value="">All types</option>
           <option value="takeaway">Takeaway</option>
@@ -75,62 +75,57 @@ export default function AdminOrdersPage() {
         <button
           type="button"
           onClick={() => load().catch(() => null)}
-          className="rounded-full bg-[#c45c26] px-4 py-2 text-sm font-semibold text-white"
+          className="admin-btn-primary"
         >
           Filter
         </button>
       </div>
 
-      <div className="mt-6 overflow-x-auto rounded-2xl border border-[#e4ddd3] bg-white">
-        <table className="min-w-full text-sm">
-          <thead className="bg-[#f6f3ee] text-left">
+      <div className="admin-table-wrap mt-6">
+        <table className="admin-table">
+          <thead>
             <tr>
-              <th className="px-4 py-3">Order</th>
-              <th className="px-4 py-3">Customer</th>
-              <th className="px-4 py-3">Type</th>
-              <th className="px-4 py-3">Status</th>
-              <th className="px-4 py-3">Total</th>
-              <th className="px-4 py-3"></th>
+              <th>Order</th>
+              <th>Customer</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Total</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             {orders.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-[#6b645c]">
+                <td colSpan={6} className="px-4 py-8 text-center text-muted">
                   No orders yet.
                 </td>
               </tr>
             ) : (
               orders.map((order) => (
-                <tr key={order.public_reference} className="border-t border-[#e4ddd3]">
-                  <td className="px-4 py-3">
+                <tr key={order.public_reference}>
+                  <td>
                     <div className="font-medium">{order.order_number}</div>
-                    <div className="text-xs text-[#6b645c]">
+                    <div className="text-xs text-muted">
                       {order.created_at
                         ? new Date(order.created_at).toLocaleString()
                         : ""}
                     </div>
                   </td>
-                  <td className="px-4 py-3">
+                  <td>
                     <div>{order.customer_name}</div>
-                    <div dir="ltr" className="text-[#6b645c]">
+                    <div dir="ltr" className="text-muted">
                       {order.customer_phone}
                     </div>
                   </td>
-                  <td className="px-4 py-3">{order.order_type}</td>
-                  <td className="px-4 py-3">
-                    <span className="rounded-full bg-[#f6f3ee] px-2 py-1 text-xs capitalize">
+                  <td className="capitalize">{order.order_type}</td>
+                  <td>
+                    <span className="admin-badge">
                       {order.status.replaceAll("_", " ")}
                     </span>
                   </td>
-                  <td className="px-4 py-3">
-                    {formatMoney(order.total, "LBP", 0)}
-                  </td>
-                  <td className="px-4 py-3">
-                    <Link
-                      href={`/admin/orders/${order.id}`}
-                      className="text-[#c45c26]"
-                    >
+                  <td>{formatMoney(order.total, "LBP", 0)}</td>
+                  <td>
+                    <Link href={`/admin/orders/${order.id}`} className="admin-link">
                       Open
                     </Link>
                   </td>

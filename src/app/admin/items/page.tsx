@@ -113,7 +113,7 @@ export default function AdminItemsPage() {
   return (
     <AdminShell>
       <div className="flex flex-wrap items-end justify-between gap-3">
-        <h1 className="font-display text-3xl">Menu items</h1>
+        <h1 className="font-display text-3xl tracking-tight">Menu items</h1>
         <div className="flex gap-2">
           <Input
             value={q}
@@ -125,13 +125,13 @@ export default function AdminItemsPage() {
         </div>
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center gap-3 rounded-2xl border border-[#e4ddd3] bg-white p-4">
-        <label className="grid gap-1 text-xs font-medium text-[#6b645c]">
+      <div className="admin-card mt-4 flex flex-wrap items-center gap-3 p-4">
+        <label className="grid gap-1 text-xs font-medium text-muted">
           Category
           <select
             value={listCategoryId}
             onChange={(e) => setListCategoryId(e.target.value)}
-            className="min-w-48 rounded-xl border border-[#e4ddd3] px-3 py-2 text-sm text-[#211d19]"
+            className="admin-select min-w-48"
           >
             <option value="">All categories</option>
             {categories.map((category) => (
@@ -139,77 +139,77 @@ export default function AdminItemsPage() {
             ))}
           </select>
         </label>
-        <label className="grid gap-1 text-xs font-medium text-[#6b645c]">
+        <label className="grid gap-1 text-xs font-medium text-muted">
           Website display
           <select
             value={visibilityFilter}
             onChange={(e) => setVisibilityFilter(e.target.value)}
-            className="min-w-40 rounded-xl border border-[#e4ddd3] px-3 py-2 text-sm text-[#211d19]"
+            className="admin-select min-w-40"
           >
             <option value="all">All items</option>
             <option value="visible">Shown on website</option>
             <option value="hidden">Hidden from website</option>
           </select>
         </label>
-        <p className="ml-auto text-sm text-[#6b645c]">{filteredItems.length} items · Lower display order appears first in its category.</p>
+        <p className="ml-auto text-sm text-muted">{filteredItems.length} items · Lower display order appears first in its category.</p>
       </div>
 
       <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="font-display text-2xl">Manage items</h2>
-          <p className="mt-1 text-sm text-[#6b645c]">Search, filter, edit, and control website visibility.</p>
+          <p className="mt-1 text-sm text-muted">Search, filter, edit, and control website visibility.</p>
         </div>
-        <Link href="/admin/items/new" className="inline-flex items-center rounded-full bg-[#c45c26] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#9a451c]">
+        <Link href="/admin/items/new" className="admin-btn-primary">
           + Add item
         </Link>
       </div>
 
-      <div className="mt-8 overflow-x-auto rounded-2xl border border-[#e4ddd3] bg-white">
-        <table className="min-w-full text-sm">
-          <thead className="bg-[#f6f3ee] text-left">
+      <div className="admin-table-wrap mt-8">
+        <table className="admin-table">
+          <thead>
             <tr>
-              <th className="px-4 py-3">Item</th>
-              <th className="px-4 py-3">Category / order</th>
-              <th className="px-4 py-3">Price</th>
-              <th className="px-4 py-3">Website</th>
-              <th className="px-4 py-3">Availability</th>
-              <th className="px-4 py-3">Actions</th>
+              <th>Item</th>
+              <th>Category / order</th>
+              <th>Price</th>
+              <th>Website</th>
+              <th>Availability</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {filteredItems.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-[#6b645c]">
+                <td colSpan={6} className="px-4 py-8 text-center text-muted">
                   No items match these filters.
                 </td>
               </tr>
             ) : (
               filteredItems.map((item) => (
-                <tr key={item.id} className="border-t border-[#e4ddd3]">
-                  <td className="px-4 py-3">
+                <tr key={item.id}>
+                  <td>
                     <div className="font-medium">{item.name_en}</div>
-                    <div className="text-[#6b645c]" dir="rtl">
+                    <div className="text-muted" dir="rtl">
                       {item.name_ar}
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-[#6b645c]">
+                  <td className="text-muted">
                     <div>{categories.find((category) => category.id === item.category_id)?.name_en ?? "Uncategorized"}</div>
                     <div className="text-xs">Order {item.sort_order ?? 0}</div>
                   </td>
-                  <td className="px-4 py-3">{formatMoney(item.price, "LBP", 0)}</td>
-                  <td className="px-4 py-3">
-                    <button type="button" onClick={() => toggleVisibility(item)} className={item.is_visible ? "text-green-700" : "text-[#8a8177]"}>
+                  <td>{formatMoney(item.price, "LBP", 0)}</td>
+                  <td>
+                    <button type="button" onClick={() => toggleVisibility(item)} className={item.is_visible ? "text-green-700" : "text-muted"}>
                       {item.is_visible ? "Shown · Hide" : "Hidden · Show"}
                     </button>
-                    {item.is_featured ? <div className="text-xs text-[#c45c26]">Featured</div> : null}
+                    {item.is_featured ? <div className="text-xs text-accent">Featured</div> : null}
                   </td>
-                  <td className="px-4 py-3">
-                    <button type="button" onClick={() => toggleSoldOut(item)} className="text-[#6b645c]">
+                  <td>
+                    <button type="button" onClick={() => toggleSoldOut(item)} className="text-muted">
                       {item.is_available ? "Available · Mark sold out" : "Sold out · Make available"}
                     </button>
                   </td>
-                  <td className="px-4 py-3 space-x-2">
-                    <Link href={`/admin/items/${item.id}`} className="text-[#c45c26]">
+                  <td className="space-x-2">
+                    <Link href={`/admin/items/${item.id}`} className="admin-link">
                       Edit
                     </Link>
                     <button type="button" onClick={() => remove(item)} className="text-red-700">
