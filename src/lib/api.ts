@@ -102,6 +102,22 @@ export const api = {
   adminMe: (token: string) =>
     request<{ id: number; name: string; email: string }>("/admin/me", {}, token),
 
+  adminUpdateProfile: (
+    token: string,
+    payload: {
+      name?: string;
+      email?: string;
+      current_password?: string;
+      password?: string;
+      password_confirmation?: string;
+    }
+  ) =>
+    request<{ id: number; name: string; email: string; message: string }>(
+      "/admin/me",
+      { method: "PUT", body: JSON.stringify(payload) },
+      token
+    ),
+
   adminLogout: (token: string) =>
     request<{ message: string }>("/admin/logout", { method: "POST" }, token),
 

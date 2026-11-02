@@ -25,9 +25,10 @@ export const demoRestaurant: Restaurant = {
 };
 
 export function withCatalogRestaurant(restaurant: Restaurant | null | undefined): Restaurant {
+  const incoming = restaurant ?? {};
   return {
     ...demoRestaurant,
-    ...(restaurant ?? {}),
+    ...incoming,
     name_en: demoRestaurant.name_en,
     name_ar: demoRestaurant.name_ar,
     intro_en: demoRestaurant.intro_en,
@@ -40,6 +41,6 @@ export function withCatalogRestaurant(restaurant: Restaurant | null | undefined)
     instagram_url: null,
     currency: demoRestaurant.currency,
     currency_decimals: 0,
-    hero_image_url: demoRestaurant.hero_image_url,
+    hero_image_url: incoming.hero_image_url || demoRestaurant.hero_image_url,
   };
 }

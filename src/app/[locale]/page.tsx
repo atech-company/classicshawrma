@@ -154,7 +154,10 @@ export default async function HomePage({
 
           <Link href={`/menu/${featuredDish.slug}`} className="hero-side-card group relative mx-auto block w-full max-w-[390px] animate-[floatIn_1.2s_cubic-bezier(.2,.75,.25,1)_both] lg:ms-auto lg:me-3">
             <div className="hero-feature-frame relative aspect-[.88] overflow-hidden rounded-[2rem] border border-white/30 shadow-[0_30px_100px_rgba(0,0,0,.45)]">
-              {featuredDish.image_url && <Image src={featuredDish.image_url} alt={localized(featuredDish, locale, "name")} fill sizes="(max-width: 1024px) 90vw, 390px" className="object-cover transition duration-700 group-hover:scale-[1.04]" priority />}
+              {featuredDish.image_url && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={featuredDish.image_url} alt={localized(featuredDish, locale, "name")} className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]" />
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/5 to-black/10" />
               <div className="absolute start-5 top-5 rounded-full border border-white/25 bg-black/25 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[.16em] text-white backdrop-blur-xl">{isArabic ? "من قائمتنا" : "A taste of our menu"}</div>
               <div className="absolute inset-x-0 bottom-0 p-6 text-white md:p-7" dir={isArabic ? "rtl" : "ltr"}>
@@ -240,7 +243,12 @@ export default async function HomePage({
         <div className="category-showcase-grid grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-6">
           {categoryShowcase.map(({ category, items, image }, index) => (
             <Link key={category.id} href={`#category-${category.slug}`} className="category-tile group relative isolate flex min-h-40 items-end overflow-hidden rounded-[1.3rem] border border-white/75 bg-[#291a12] shadow-[0_12px_32px_rgba(55,34,18,.1)] sm:min-h-48 lg:min-h-56" style={{ animationDelay: `${index * 70}ms` }}>
-              {image ? <Image src={image} alt="" fill sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw" loading="lazy" className="category-tile-image object-cover" /> : <Image src={brand.logo} alt="" fill sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw" loading="lazy" className="bg-white object-contain p-7" />}
+              {image ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={image} alt="" loading="lazy" decoding="async" className="category-tile-image absolute inset-0 h-full w-full object-cover" />
+              ) : (
+                <Image src={brand.logo} alt="" fill sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw" loading="lazy" className="bg-white object-contain p-7" />
+              )}
               <span className="category-tile-shade absolute inset-0" />
               <span className="relative z-[1] w-full p-3 text-white sm:p-4" dir={isArabic ? "rtl" : "ltr"}>
                 <span className="block font-display text-lg leading-tight sm:text-xl">{localized(category, locale, "name")}</span>
@@ -295,7 +303,12 @@ export default async function HomePage({
                   {items.map((item) => (
                     <article key={item.id} className="home-menu-card group flex min-h-[126px] items-center gap-4 rounded-2xl border border-white/75 bg-white/55 p-3 shadow-[0_10px_28px_rgba(66,43,25,.045)] backdrop-blur-xl transition duration-300 hover:-translate-y-0.5 hover:border-white hover:bg-white/85 hover:shadow-[0_18px_40px_rgba(66,43,25,.09)] sm:gap-5 sm:p-4" dir={isArabic ? "rtl" : "ltr"}>
                       <Link href={`/menu/${item.slug}`} aria-label={localized(item, locale, "name")} className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-[linear-gradient(135deg,#392419,#a9552c)] sm:h-28 sm:w-28">
-                        {item.image_url ? <Image src={item.image_url} alt={localized(item, locale, "name")} fill sizes="112px" loading="lazy" className="object-cover transition duration-500 group-hover:scale-105" /> : <Image src={brand.logo} alt="Classic Shawarma" fill sizes="112px" loading="lazy" className="bg-white object-contain p-1" />}
+                        {item.image_url ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={item.image_url} alt={localized(item, locale, "name")} loading="lazy" decoding="async" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+                        ) : (
+                          <Image src={brand.logo} alt="Classic Shawarma" fill sizes="112px" loading="lazy" className="bg-white object-contain p-1" />
+                        )}
                       </Link>
                       <div className="min-w-0 flex-1 py-1">
                         <Link href={`/menu/${item.slug}`} className="block">

@@ -23,6 +23,14 @@ export default function AdminSettingsPage() {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [accountMessage, setAccountMessage] = useState("");
+  const [accountError, setAccountError] = useState("");
+  const [accountSaving, setAccountSaving] = useState(false);
+  const [adminName, setAdminName] = useState("");
+  const [adminEmail, setAdminEmail] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
   const [nameEn, setNameEn] = useState("");
   const [nameAr, setNameAr] = useState("");
   const [introEn, setIntroEn] = useState("");
@@ -47,9 +55,10 @@ export default function AdminSettingsPage() {
   useEffect(() => {
     const token = getAdminToken();
     if (!token) return;
-    api
-      .adminRestaurant(token)
-      .then((r) => {
+    Promise.all([api.adminMe(token), api.adminRestaurant(token)])
+      .then(([me, r]) => {
+        setAdminName(me.name);
+        setAdminEmail(me.email);
         setNameEn(r.name_en);
         setNameAr(r.name_ar);
         setIntroEn(r.intro_en ?? "");
@@ -72,6 +81,62 @@ export default function AdminSettingsPage() {
       .catch(() => setError("Could not load restaurant settings."))
       .finally(() => setLoading(false));
   }, []);
+
+  async function onAccountSubmit(e: FormEvent) {
+    e.preventDefault();
+    const token = getAdminToken();
+    if (!token) return;
+    setAccountMessage("");
+    setAccountError("");
+
+    if (newPassword && newPassword !== newPasswordConfirm) {
+      setAccountError("New password confirmation does not match.");
+      return;
+    }
+
+    if (newPassword && !currentPassword) {
+      setAccountError("Enter your current password to set a new one.");
+      return;
+    }
+
+    setAccountSaving(true);
+    try {
+      const payload: {
+        name: string;
+        email: string;
+        current_password?: string;
+        password?: string;
+        password_confirmation?: string;
+      } = {
+        name: adminName.trim(),
+        email: adminEmail.trim(),
+      };
+      if (newPassword) {
+        payload.current_password = currentPassword;
+        payload.password = newPassword;
+        payload.password_confirmation = newPasswordConfirm;
+      }
+      const updated = await api.adminUpdateProfile(token, payload);
+      setAdminName(updated.name);
+      setAdminEmail(updated.email);
+      setCurrentPassword("");
+      setNewPassword("");
+      setNewPasswordConfirm("");
+      setAccountMessage(
+        newPassword
+          ? "Account updated. Use your new email/password next time you sign in."
+          : "Account updated."
+      );
+    } catch (err) {
+      const apiErr = err as Error & { errors?: Record<string, string[]> };
+      const firstFieldError = apiErr.errors
+        ? Object.values(apiErr.errors).flat()[0]
+        : undefined;
+      setAccountError(firstFieldError || apiErr.message || "Could not update account.");
+    } finally {
+      setAccountSaving(false);
+    }
+  }
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -121,10 +186,80 @@ export default function AdminSettingsPage() {
 
   return (
     <AdminShell>
-      <h1 className="text-2xl font-semibold tracking-tight text-[var(--admin-text)]">Restaurant settings</h1>
+      <h1 className="text-2xl font-semibold tracking-tight text-[var(--admin-text)]">Settings</h1>
       <p className="mt-1 text-sm text-[var(--admin-muted)]">
-        Contact, hours, fees, and hero image shown on the customer site.
+        Admin login details and restaurant info shown on the customer site.
       </p>
+
+      <form onSubmit={onAccountSubmit} className="mt-6">
+        <Card className="admin-card grid gap-3 border-[var(--admin-border)] bg-[rgba(255,255,255,.62)] p-5 shadow-[var(--admin-shadow)] md:grid-cols-2">
+          <div className="md:col-span-2">
+            <h2 className="font-semibold">Admin account</h2>
+            <p className="mt-1 text-sm text-[var(--admin-muted)]">
+              Change your display name, login email (username), and password.
+            </p>
+          </div>
+          <label className="grid gap-1 text-sm text-[var(--admin-muted)]">
+            Display name
+            <Input
+              required
+              value={adminName}
+              onChange={(e) => setAdminName(e.target.value)}
+              placeholder="Admin name"
+              autoComplete="name"
+            />
+          </label>
+          <label className="grid gap-1 text-sm text-[var(--admin-muted)]">
+            Login email / username
+            <Input
+              required
+              type="email"
+              value={adminEmail}
+              onChange={(e) => setAdminEmail(e.target.value)}
+              placeholder="admin@example.com"
+              autoComplete="username"
+              dir="ltr"
+            />
+          </label>
+          <label className="grid gap-1 text-sm text-[var(--admin-muted)] md:col-span-2">
+            Current password
+            <Input
+              type="password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              placeholder="Required only when changing password"
+              autoComplete="current-password"
+            />
+          </label>
+          <label className="grid gap-1 text-sm text-[var(--admin-muted)]">
+            New password
+            <Input
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              placeholder="Leave blank to keep current"
+              autoComplete="new-password"
+            />
+          </label>
+          <label className="grid gap-1 text-sm text-[var(--admin-muted)]">
+            Confirm new password
+            <Input
+              type="password"
+              value={newPasswordConfirm}
+              onChange={(e) => setNewPasswordConfirm(e.target.value)}
+              placeholder="Repeat new password"
+              autoComplete="new-password"
+            />
+          </label>
+          {accountMessage && <p className="md:col-span-2 text-sm text-green-700">{accountMessage}</p>}
+          {accountError && <p className="md:col-span-2 text-sm text-red-700">{accountError}</p>}
+          <div className="md:col-span-2">
+            <Button type="submit" disabled={accountSaving}>
+              {accountSaving ? "Saving account…" : "Save account"}
+            </Button>
+          </div>
+        </Card>
+      </form>
 
       <form onSubmit={onSubmit} className="mt-6 space-y-6">
         <Card className="admin-card grid gap-3 border-[var(--admin-border)] bg-[rgba(255,255,255,.62)] p-5 shadow-[var(--admin-shadow)] md:grid-cols-2">

@@ -3,12 +3,33 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
+const storageHosts = [
+  "localhost",
+  "127.0.0.1",
+  "classicshawrma.atechleb.com",
+  "classicshwarma.atechleb.com",
+] as const;
+
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
-      { protocol: "http", hostname: "localhost", port: "8000", pathname: "/storage/**" },
-      { protocol: "http", hostname: "127.0.0.1", port: "8000", pathname: "/storage/**" },
-      { protocol: "https", hostname: "classicshwarma.atechleb.com", pathname: "/storage/**" },
+      ...storageHosts.flatMap((hostname) => {
+        const local = hostname === "localhost" || hostname === "127.0.0.1";
+        return [
+          {
+            protocol: local ? ("http" as const) : ("https" as const),
+            hostname,
+            ...(local ? { port: "8000" } : {}),
+            pathname: "/storage/**",
+          },
+          {
+            protocol: local ? ("http" as const) : ("https" as const),
+            hostname,
+            ...(local ? { port: "8000" } : {}),
+            pathname: "/media/**",
+          },
+        ];
+      }),
       {
         protocol: "https",
         hostname: "ccptvqjhtddwkwfhgrfr.supabase.co",

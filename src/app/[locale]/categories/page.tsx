@@ -110,7 +110,8 @@ export default async function CategoriesPage({
             style={{ animationDelay: `${Math.min(index, 10) * 55}ms` }}
           >
             {image ? (
-              <Image src={image} alt="" fill sizes="(max-width: 640px) 50vw, (max-width: 1280px) 33vw, 25vw" loading="lazy" className="category-page-card-image object-cover" />
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={image} alt="" loading="lazy" decoding="async" className="category-page-card-image absolute inset-0 h-full w-full object-cover" />
             ) : (
               <Image src={brand.logo} alt="" fill sizes="(max-width: 640px) 50vw, (max-width: 1280px) 33vw, 25vw" loading="lazy" className="category-page-card-image bg-white object-contain p-10" />
             )}
