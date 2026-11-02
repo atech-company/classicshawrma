@@ -39,7 +39,7 @@ export function ItemCustomizationsEditor({
 }) {
   return (
     <div className="space-y-6 md:col-span-2">
-      <section className="rounded-xl border border-border p-4">
+      <section className="rounded-xl border border-[rgba(154,160,180,.28)] p-4">
         <div className="flex items-center justify-between gap-3">
           <h3 className="font-semibold">Variants (size / option)</h3>
           <Button
@@ -63,14 +63,14 @@ export function ItemCustomizationsEditor({
         </div>
         <div className="mt-3 space-y-3">
           {variants.length === 0 && (
-            <p className="text-sm text-muted">
+            <p className="text-sm text-[var(--admin-muted)]">
               Optional. Example: Small / Large with price adjustments.
             </p>
           )}
           {variants.map((variant, index) => (
             <div
               key={index}
-              className="grid gap-2 rounded-lg bg-background p-3 md:grid-cols-4"
+              className="grid gap-2 rounded-lg bg-[rgba(246,247,252,.9)] p-3 md:grid-cols-4"
             >
               <Input
                 placeholder="Name EN"
@@ -133,7 +133,7 @@ export function ItemCustomizationsEditor({
         </div>
       </section>
 
-      <section className="rounded-xl border border-border p-4">
+      <section className="rounded-xl border border-[rgba(154,160,180,.28)] p-4">
         <div className="flex items-center justify-between gap-3">
           <h3 className="font-semibold">Extras / modifier groups</h3>
           <Button
@@ -166,12 +166,12 @@ export function ItemCustomizationsEditor({
         </div>
         <div className="mt-3 space-y-4">
           {groups.length === 0 && (
-            <p className="text-sm text-muted">
+            <p className="text-sm text-[var(--admin-muted)]">
               Optional. Example: Sauces, Extra cheese (required or multi-select).
             </p>
           )}
           {groups.map((group, gIndex) => (
-            <div key={gIndex} className="rounded-lg border border-border p-3">
+            <div key={gIndex} className="rounded-lg border border-[rgba(154,160,180,.28)] p-3">
               <div className="grid gap-2 md:grid-cols-2">
                 <Input
                   placeholder="Group name EN"
@@ -239,7 +239,7 @@ export function ItemCustomizationsEditor({
                 {group.options.map((opt, oIndex) => (
                   <div
                     key={oIndex}
-                    className="grid gap-2 rounded-md bg-background p-2 md:grid-cols-4"
+                    className="grid gap-2 rounded-md bg-[rgba(246,247,252,.9)] p-2 md:grid-cols-4"
                   >
                     <Input
                       placeholder="Option EN"

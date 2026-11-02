@@ -9,6 +9,7 @@ import {
   type VariantDraft,
 } from "@/components/admin/item-customizations-editor";
 import { AdminShell } from "@/components/admin/admin-shell";
+import { WidgetCard } from "@/components/admin/widget-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -83,15 +84,16 @@ export default function AdminNewItemPage() {
         ← Back to items
       </Link>
       <div className="mt-3">
-        <h1 className="font-display text-3xl tracking-tight">Add menu item</h1>
-        <p className="mt-1 text-sm text-muted">Create a new item for the restaurant menu.</p>
+        <h1 className="text-2xl font-semibold tracking-tight text-[var(--admin-text)]">Add menu item</h1>
+        <p className="mt-1 text-sm text-[var(--admin-muted)]">Create a new item for the restaurant menu.</p>
       </div>
 
+      <WidgetCard title="Item details" accent="purple" className="mt-6 max-w-4xl">
       <form
         onSubmit={onSubmit}
-        className="admin-card mt-6 grid max-w-4xl gap-3 p-5 md:grid-cols-2"
+        className="grid gap-3 md:grid-cols-2"
       >
-        <label className="grid gap-1 text-sm text-muted md:col-span-2">
+        <label className="grid gap-1 text-sm text-[var(--admin-muted)] md:col-span-2">
           Category
           <select
             required
@@ -109,15 +111,15 @@ export default function AdminNewItemPage() {
         <Input required placeholder="Name (AR)" value={nameAr} onChange={(event) => setNameAr(event.target.value)} dir="rtl" />
         <Textarea placeholder="Description (EN)" value={descriptionEn} onChange={(event) => setDescriptionEn(event.target.value)} />
         <Textarea placeholder="Description (AR)" value={descriptionAr} onChange={(event) => setDescriptionAr(event.target.value)} dir="rtl" />
-        <label className="grid gap-1 text-sm text-muted">
+        <label className="grid gap-1 text-sm text-[var(--admin-muted)]">
           Price (integer)
           <Input required type="number" min={0} value={price} onChange={(event) => setPrice(event.target.value)} />
         </label>
-        <label className="grid gap-1 text-sm text-muted">
+        <label className="grid gap-1 text-sm text-[var(--admin-muted)]">
           Display order in category (optional)
           <Input type="number" min={0} placeholder="Add to end automatically" value={sortOrder} onChange={(event) => setSortOrder(event.target.value)} />
         </label>
-        <label className="grid gap-1 text-sm text-muted md:col-span-2">
+        <label className="grid gap-1 text-sm text-[var(--admin-muted)] md:col-span-2">
           Item photo (optional)
           <Input type="file" accept="image/*" onChange={(event) => setImage(event.target.files?.[0] ?? null)} />
         </label>
@@ -138,7 +140,7 @@ export default function AdminNewItemPage() {
         />
 
         {categoriesLoaded && categories.length === 0 && (
-          <p className="text-sm text-muted md:col-span-2">
+          <p className="text-sm text-[var(--admin-muted)] md:col-span-2">
             Create a category before adding menu items.
           </p>
         )}
@@ -147,6 +149,7 @@ export default function AdminNewItemPage() {
           {saving ? "Saving…" : "Create item"}
         </Button>
       </form>
+      </WidgetCard>
     </AdminShell>
   );
 }

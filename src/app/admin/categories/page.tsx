@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { AdminShell } from "@/components/admin/admin-shell";
+import { WidgetCard } from "@/components/admin/widget-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -111,14 +112,12 @@ export default function AdminCategoriesPage() {
 
   return (
     <AdminShell>
-      <h1 className="font-display text-3xl tracking-tight">Categories</h1>
+      <h1 className="text-2xl font-semibold tracking-tight text-[var(--admin-text)]">Categories</h1>
+      <WidgetCard title={editing ? `Edit ${editing.name_en}` : "New category"} accent="purple" className="mt-6">
       <form
         onSubmit={onSubmit}
-        className="admin-card mt-6 grid gap-3 p-5 md:grid-cols-2"
+        className="grid gap-3 md:grid-cols-2"
       >
-        <h2 className="md:col-span-2 font-semibold">
-          {editing ? `Edit ${editing.name_en}` : "New category"}
-        </h2>
         <Input
           required
           placeholder="Name (EN)"
@@ -167,8 +166,10 @@ export default function AdminCategoriesPage() {
         </div>
         {message && <p className="md:col-span-2 text-sm text-green-700">{message}</p>}
       </form>
+      </WidgetCard>
 
-      <div className="admin-table-wrap mt-8">
+      <WidgetCard title="Category list" accent="green" className="mt-8" bodyClassName="!p-0">
+      <div className="admin-table-wrap !border-0 !shadow-none !rounded-none">
         <table className="admin-table">
           <thead>
             <tr>
@@ -183,7 +184,7 @@ export default function AdminCategoriesPage() {
           <tbody>
             {categories.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-muted">
+                <td colSpan={6} className="px-4 py-8 text-center text-[var(--admin-muted)]">
                   No categories yet. Create your first one above.
                 </td>
               </tr>
@@ -214,7 +215,7 @@ export default function AdminCategoriesPage() {
                   </td>
                   <td>
                     <div>{cat.name_en}</div>
-                    <div className="text-muted" dir="rtl">
+                    <div className="text-[var(--admin-muted)]" dir="rtl">
                       {cat.name_ar}
                     </div>
                   </td>
@@ -227,7 +228,7 @@ export default function AdminCategoriesPage() {
                     <button type="button" onClick={() => startEdit(cat)} className="admin-link">
                       Edit
                     </button>
-                    <button type="button" onClick={() => toggleActive(cat)} className="text-muted">
+                    <button type="button" onClick={() => toggleActive(cat)} className="text-[var(--admin-muted)]">
                       {cat.is_active ? "Deactivate" : "Activate"}
                     </button>
                     <button type="button" onClick={() => remove(cat)} className="text-red-700">
@@ -240,6 +241,7 @@ export default function AdminCategoriesPage() {
           </tbody>
         </table>
       </div>
+      </WidgetCard>
     </AdminShell>
   );
 }

@@ -58,7 +58,7 @@ export default function AdminOrderDetailPage() {
   if (!order) {
     return (
       <AdminShell>
-        <p className="text-sm text-muted">Loading order…</p>
+        <p className="text-sm text-[var(--admin-muted)]">Loading order…</p>
       </AdminShell>
     );
   }
@@ -69,15 +69,15 @@ export default function AdminOrderDetailPage() {
     <AdminShell>
       <div className="flex flex-wrap items-start justify-between gap-3 print:block">
         <div>
-          <h1 className="font-display text-3xl tracking-tight">{order.order_number}</h1>
-          <p className="mt-1 text-sm capitalize text-muted">
+          <h1 className="text-2xl font-semibold tracking-tight text-[var(--admin-text)]">{order.order_number}</h1>
+          <p className="mt-1 text-sm capitalize text-[var(--admin-muted)]">
             {order.status.replaceAll("_", " ")} · {order.order_type}
           </p>
         </div>
         <button
           type="button"
           onClick={printReceipt}
-          className="rounded-full border border-border bg-surface px-4 py-2 text-sm font-semibold print:hidden"
+          className="rounded-full border border-white/80 bg-white/80 px-4 py-2 text-sm font-semibold print:hidden"
         >
           Print receipt
         </button>
@@ -92,7 +92,7 @@ export default function AdminOrderDetailPage() {
             <p className="mt-2">{order.delivery_address}</p>
           )}
           {order.delivery_instructions && (
-            <p className="mt-1 text-muted">{order.delivery_instructions}</p>
+            <p className="mt-1 text-[var(--admin-muted)]">{order.delivery_instructions}</p>
           )}
           {order.customer_notes && (
             <p className="mt-2">Notes: {order.customer_notes}</p>
@@ -116,13 +116,13 @@ export default function AdminOrderDetailPage() {
         <h2 className="font-semibold">Items</h2>
         <ul className="mt-3 space-y-2 text-sm">
           {(order.items ?? []).map((item) => (
-            <li key={item.id} className="flex justify-between gap-3 border-b border-border py-2 last:border-0">
+            <li key={item.id} className="flex justify-between gap-3 border-b border-[rgba(154,160,180,.16)] py-2 last:border-0">
               <div>
                 <p>
                   {item.quantity}× {item.item_name_en}
                 </p>
                 {item.notes && (
-                  <p className="text-muted">{item.notes}</p>
+                  <p className="text-[var(--admin-muted)]">{item.notes}</p>
                 )}
               </div>
               <p>{formatMoney(item.line_total, "LBP", 0)}</p>

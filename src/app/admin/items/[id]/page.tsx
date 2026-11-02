@@ -8,6 +8,7 @@ import {
   type VariantDraft,
 } from "@/components/admin/item-customizations-editor";
 import { AdminShell } from "@/components/admin/admin-shell";
+import { WidgetCard } from "@/components/admin/widget-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -113,17 +114,18 @@ export default function AdminEditItemPage() {
   if (!item) {
     return (
       <AdminShell>
-        <p className="text-sm text-muted">Loading item…</p>
+        <p className="text-sm text-[var(--admin-muted)]">Loading item…</p>
       </AdminShell>
     );
   }
 
   return (
     <AdminShell>
-      <h1 className="font-display text-3xl tracking-tight">Edit item</h1>
+      <h1 className="text-2xl font-semibold tracking-tight text-[var(--admin-text)]">Edit item</h1>
+      <WidgetCard title={item.name_en} accent="purple" className="mt-6 max-w-4xl">
       <form
         onSubmit={onSubmit}
-        className="admin-card mt-6 grid max-w-4xl gap-3 p-5 md:grid-cols-2"
+        className="grid gap-3 md:grid-cols-2"
       >
         <select
           required
@@ -142,7 +144,7 @@ export default function AdminEditItemPage() {
         <Textarea value={descriptionEn} onChange={(e) => setDescriptionEn(e.target.value)} />
         <Textarea value={descriptionAr} onChange={(e) => setDescriptionAr(e.target.value)} dir="rtl" />
         <Input required type="number" value={price} onChange={(e) => setPrice(e.target.value)} />
-        <label className="grid gap-1 text-sm text-muted">
+        <label className="grid gap-1 text-sm text-[var(--admin-muted)]">
           Display order within category
           <Input type="number" min={0} value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} />
         </label>
@@ -171,6 +173,7 @@ export default function AdminEditItemPage() {
         {message && <p className="text-sm text-green-700">{message}</p>}
         {error && <p className="text-sm text-red-700 md:col-span-2">{error}</p>}
       </form>
+      </WidgetCard>
     </AdminShell>
   );
 }

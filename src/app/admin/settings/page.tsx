@@ -114,20 +114,20 @@ export default function AdminSettingsPage() {
   if (loading) {
     return (
       <AdminShell>
-        <p className="text-sm text-muted">Loading settings…</p>
+        <p className="text-sm text-[var(--admin-muted)]">Loading settings…</p>
       </AdminShell>
     );
   }
 
   return (
     <AdminShell>
-      <h1 className="font-display text-3xl tracking-tight">Restaurant settings</h1>
-      <p className="mt-1 text-sm text-muted">
+      <h1 className="text-2xl font-semibold tracking-tight text-[var(--admin-text)]">Restaurant settings</h1>
+      <p className="mt-1 text-sm text-[var(--admin-muted)]">
         Contact, hours, fees, and hero image shown on the customer site.
       </p>
 
       <form onSubmit={onSubmit} className="mt-6 space-y-6">
-        <Card className="grid gap-3 p-5 md:grid-cols-2">
+        <Card className="admin-card grid gap-3 border-[var(--admin-border)] bg-[rgba(255,255,255,.62)] p-5 shadow-[var(--admin-shadow)] md:grid-cols-2">
           <h2 className="md:col-span-2 font-semibold">Branding & intro</h2>
           <Input required value={nameEn} onChange={(e) => setNameEn(e.target.value)} placeholder="Name EN" />
           <Input required value={nameAr} onChange={(e) => setNameAr(e.target.value)} placeholder="Name AR" dir="rtl" />
@@ -147,7 +147,7 @@ export default function AdminSettingsPage() {
           </div>
         </Card>
 
-        <Card className="grid gap-3 p-5 md:grid-cols-2">
+        <Card className="admin-card grid gap-3 border-[var(--admin-border)] bg-[rgba(255,255,255,.62)] p-5 shadow-[var(--admin-shadow)] md:grid-cols-2">
           <h2 className="md:col-span-2 font-semibold">Contact & social</h2>
           <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone" dir="ltr" />
           <Input value={phoneSecondary} onChange={(e) => setPhoneSecondary(e.target.value)} placeholder="Secondary phone" dir="ltr" />
@@ -157,7 +157,7 @@ export default function AdminSettingsPage() {
           <Input value={instagramUrl} onChange={(e) => setInstagramUrl(e.target.value)} placeholder="Instagram URL" />
         </Card>
 
-        <Card className="grid gap-3 p-5 md:grid-cols-2">
+        <Card className="admin-card grid gap-3 border-[var(--admin-border)] bg-[rgba(255,255,255,.62)] p-5 shadow-[var(--admin-shadow)] md:grid-cols-2">
           <h2 className="md:col-span-2 font-semibold">Ordering</h2>
           <label className="flex items-center gap-2 text-sm">
             <input type="checkbox" checked={takeawayEnabled} onChange={(e) => setTakeawayEnabled(e.target.checked)} />
@@ -180,9 +180,9 @@ export default function AdminSettingsPage() {
           </select>
         </Card>
 
-        <Card className="grid gap-3 p-5 md:grid-cols-2">
+        <Card className="admin-card grid gap-3 border-[var(--admin-border)] bg-[rgba(255,255,255,.62)] p-5 shadow-[var(--admin-shadow)] md:grid-cols-2">
           <h2 className="md:col-span-2 font-semibold">Opening hours</h2>
-          <p className="md:col-span-2 text-sm text-muted">
+          <p className="md:col-span-2 text-sm text-[var(--admin-muted)]">
             Leave blank to hide hours on the site. Example: 12:00 – 00:00
           </p>
           {DAY_KEYS.map((day) => (

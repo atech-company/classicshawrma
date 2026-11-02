@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { AdminShell } from "@/components/admin/admin-shell";
+import { WidgetCard } from "@/components/admin/widget-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { api } from "@/lib/api";
@@ -113,58 +114,57 @@ export default function AdminItemsPage() {
   return (
     <AdminShell>
       <div className="flex flex-wrap items-end justify-between gap-3">
-        <h1 className="font-display text-3xl tracking-tight">Menu items</h1>
-        <div className="flex gap-2">
-          <Input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Search names, descriptions, Arabic, or category…"
-            aria-label="Search menu items"
-          />
-          {q ? <Button type="button" variant="outline" onClick={() => setQ("")}>Clear</Button> : null}
-        </div>
-      </div>
-
-      <div className="admin-card mt-4 flex flex-wrap items-center gap-3 p-4">
-        <label className="grid gap-1 text-xs font-medium text-muted">
-          Category
-          <select
-            value={listCategoryId}
-            onChange={(e) => setListCategoryId(e.target.value)}
-            className="admin-select min-w-48"
-          >
-            <option value="">All categories</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>{category.name_en}</option>
-            ))}
-          </select>
-        </label>
-        <label className="grid gap-1 text-xs font-medium text-muted">
-          Website display
-          <select
-            value={visibilityFilter}
-            onChange={(e) => setVisibilityFilter(e.target.value)}
-            className="admin-select min-w-40"
-          >
-            <option value="all">All items</option>
-            <option value="visible">Shown on website</option>
-            <option value="hidden">Hidden from website</option>
-          </select>
-        </label>
-        <p className="ml-auto text-sm text-muted">{filteredItems.length} items · Lower display order appears first in its category.</p>
-      </div>
-
-      <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="font-display text-2xl">Manage items</h2>
-          <p className="mt-1 text-sm text-muted">Search, filter, edit, and control website visibility.</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-[var(--admin-text)]">Menu items</h1>
+          <p className="mt-1 text-sm text-[var(--admin-muted)]">Search, filter, edit, and control website visibility.</p>
         </div>
         <Link href="/admin/items/new" className="admin-btn-primary">
           + Add item
         </Link>
       </div>
 
-      <div className="admin-table-wrap mt-8">
+      <WidgetCard title="Search & filters" accent="blue" className="mt-4">
+        <div className="flex flex-wrap items-end gap-3">
+          <div className="min-w-[14rem] flex-1">
+            <Input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Search names, descriptions, Arabic, or category…"
+              aria-label="Search menu items"
+            />
+          </div>
+          {q ? <Button type="button" variant="outline" onClick={() => setQ("")}>Clear</Button> : null}
+          <label className="grid gap-1 text-xs font-medium text-[var(--admin-muted)]">
+            Category
+            <select
+              value={listCategoryId}
+              onChange={(e) => setListCategoryId(e.target.value)}
+              className="admin-select min-w-48"
+            >
+              <option value="">All categories</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>{category.name_en}</option>
+              ))}
+            </select>
+          </label>
+          <label className="grid gap-1 text-xs font-medium text-[var(--admin-muted)]">
+            Website display
+            <select
+              value={visibilityFilter}
+              onChange={(e) => setVisibilityFilter(e.target.value)}
+              className="admin-select min-w-40"
+            >
+              <option value="all">All items</option>
+              <option value="visible">Shown on website</option>
+              <option value="hidden">Hidden from website</option>
+            </select>
+          </label>
+          <p className="text-sm text-[var(--admin-muted)]">{filteredItems.length} items</p>
+        </div>
+      </WidgetCard>
+
+      <WidgetCard title="Manage items" accent="green" className="mt-6" bodyClassName="!p-0">
+      <div className="admin-table-wrap !border-0 !shadow-none !rounded-none">
         <table className="admin-table">
           <thead>
             <tr>
@@ -179,7 +179,7 @@ export default function AdminItemsPage() {
           <tbody>
             {filteredItems.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-muted">
+                <td colSpan={6} className="px-4 py-8 text-center text-[var(--admin-muted)]">
                   No items match these filters.
                 </td>
               </tr>
@@ -188,23 +188,23 @@ export default function AdminItemsPage() {
                 <tr key={item.id}>
                   <td>
                     <div className="font-medium">{item.name_en}</div>
-                    <div className="text-muted" dir="rtl">
+                    <div className="text-[var(--admin-muted)]" dir="rtl">
                       {item.name_ar}
                     </div>
                   </td>
-                  <td className="text-muted">
+                  <td className="text-[var(--admin-muted)]">
                     <div>{categories.find((category) => category.id === item.category_id)?.name_en ?? "Uncategorized"}</div>
                     <div className="text-xs">Order {item.sort_order ?? 0}</div>
                   </td>
                   <td>{formatMoney(item.price, "LBP", 0)}</td>
                   <td>
-                    <button type="button" onClick={() => toggleVisibility(item)} className={item.is_visible ? "text-green-700" : "text-muted"}>
+                    <button type="button" onClick={() => toggleVisibility(item)} className={item.is_visible ? "text-green-700" : "text-[var(--admin-muted)]"}>
                       {item.is_visible ? "Shown · Hide" : "Hidden · Show"}
                     </button>
-                    {item.is_featured ? <div className="text-xs text-accent">Featured</div> : null}
+                    {item.is_featured ? <div className="text-xs text-[var(--admin-accent-purple)]">Featured</div> : null}
                   </td>
                   <td>
-                    <button type="button" onClick={() => toggleSoldOut(item)} className="text-muted">
+                    <button type="button" onClick={() => toggleSoldOut(item)} className="text-[var(--admin-muted)]">
                       {item.is_available ? "Available · Mark sold out" : "Sold out · Make available"}
                     </button>
                   </td>
@@ -222,6 +222,7 @@ export default function AdminItemsPage() {
           </tbody>
         </table>
       </div>
+      </WidgetCard>
     </AdminShell>
   );
 }

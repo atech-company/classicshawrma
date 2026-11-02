@@ -3,18 +3,37 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { LogOut, Sparkles } from "lucide-react";
+import {
+  LayoutGrid,
+  LogOut,
+  Menu,
+  Search,
+  Settings,
+  ShoppingBag,
+  Tags,
+  UtensilsCrossed,
+  Home,
+  Bell,
+} from "lucide-react";
 import { api } from "@/lib/api";
 import { clearAdminToken, getAdminToken } from "@/lib/admin-auth";
 import { brand } from "@/lib/brand";
 import { cn } from "@/lib/utils";
 
-const links = [
+const tabs = [
   { href: "/admin", label: "Dashboard", exact: true },
   { href: "/admin/orders", label: "Orders" },
   { href: "/admin/categories", label: "Categories" },
-  { href: "/admin/items", label: "Menu items" },
+  { href: "/admin/items", label: "Menu" },
   { href: "/admin/settings", label: "Settings" },
+];
+
+const sideLinks = [
+  { href: "/admin", label: "Dashboard", icon: Home, exact: true },
+  { href: "/admin/orders", label: "Orders", icon: ShoppingBag },
+  { href: "/admin/categories", label: "Categories", icon: Tags },
+  { href: "/admin/items", label: "Menu items", icon: UtensilsCrossed },
+  { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
 
 function isActive(pathname: string, href: string, exact?: boolean) {
@@ -26,7 +45,9 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [ready, setReady] = useState(false);
-  const [user, setUser] = useState<string>("");
+  const [user, setUser] = useState("");
+  const [email, setEmail] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const token = getAdminToken();
@@ -38,6 +59,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       .adminMe(token)
       .then((me) => {
         setUser(me.name);
+        setEmail(me.email);
         setReady(true);
       })
       .catch(() => {
@@ -61,66 +83,126 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 
   if (!ready) {
     return (
-      <div className="flex min-h-screen items-center justify-center text-sm text-muted">
+      <div className="admin-app flex min-h-screen items-center justify-center text-sm text-[var(--admin-muted)]">
         Loading admin…
       </div>
     );
   }
 
   return (
-    <div className="admin-shell min-h-screen">
-      <header className="site-header sticky top-0 z-40 px-3 pt-3 md:px-6 md:pt-4">
-        <div className="header-inner mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 rounded-[1.4rem] border border-white/75 bg-[#fffdf9]/75 px-3 py-2.5 shadow-[0_8px_30px_rgba(63,43,27,.07)] backdrop-blur-2xl sm:gap-4 sm:px-4 md:px-6">
-          <Link
-            href="/admin"
-            aria-label="Classic Shawarma admin home"
-            className="header-brand group flex min-w-0 shrink-0 items-center gap-2.5 font-display text-base tracking-tight text-foreground md:text-lg"
-          >
-            <span className="brand-mark relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-accent/15 bg-white shadow-[0_7px_18px_rgba(211,75,43,.16)] transition group-hover:-rotate-3 group-hover:scale-105">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={brand.logo} alt="" className="h-full w-full object-contain" />
-              <span className="brand-mark-sparkle pointer-events-none absolute -end-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-white">
-                <Sparkles className="h-2.5 w-2.5" />
-              </span>
-            </span>
-            <span className="min-w-0 leading-tight">
-              Classic <span className="text-accent">Shawarma</span>
-              <span className="header-brand-caption mt-0.5 block font-sans text-[9px] font-bold uppercase tracking-[.17em] text-muted">
-                Admin · {user}
-              </span>
-            </span>
-          </Link>
-
-          <nav className="admin-nav flex max-w-full flex-1 items-center gap-1 overflow-x-auto pb-0.5 sm:gap-1.5 md:justify-end md:gap-2">
-            {links.map((link) => {
-              const active = isActive(pathname, link.href, link.exact);
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  aria-current={active ? "page" : undefined}
-                  className={cn(
-                    "admin-nav-link shrink-0 rounded-full px-3 py-2 text-xs font-semibold tracking-wide transition sm:text-sm",
-                    active ? "admin-pill-active" : "text-foreground/75 hover:bg-white/70 hover:text-accent"
-                  )}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
+    <div className="admin-app min-h-screen px-2 py-3 sm:px-4 sm:py-5 lg:px-6">
+      <div className="admin-frame mx-auto max-w-[1600px]">
+        <div className="admin-panel">
+          <header className="admin-topnav">
             <button
               type="button"
-              onClick={logout}
-              className="admin-logout-btn inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border/80 bg-white/70 px-3 py-2 text-xs font-semibold text-muted transition hover:border-accent/40 hover:text-accent sm:text-sm"
+              className="admin-icon-btn lg:hidden"
+              aria-label="Toggle menu"
+              onClick={() => setMenuOpen((open) => !open)}
             >
-              <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
-              Log out
+              <Menu className="h-5 w-5" />
             </button>
-          </nav>
-        </div>
-      </header>
 
-      <main className="admin-main mx-auto max-w-7xl px-4 py-6 md:px-8 md:py-8">{children}</main>
+            <nav className="admin-tabs hidden min-w-0 flex-1 items-center gap-1 overflow-x-auto md:flex lg:gap-2">
+              {tabs.map((tab) => {
+                const active = isActive(pathname, tab.href, tab.exact);
+                return (
+                  <Link
+                    key={tab.href}
+                    href={tab.href}
+                    aria-current={active ? "page" : undefined}
+                    className={cn("admin-tab", active && "is-active")}
+                  >
+                    {tab.label}
+                  </Link>
+                );
+              })}
+            </nav>
+
+            <div className="ms-auto flex items-center gap-2 sm:gap-3">
+              <button type="button" className="admin-icon-btn" aria-label="Search">
+                <Search className="h-4 w-4" />
+              </button>
+              <button type="button" className="admin-icon-btn hidden sm:inline-flex" aria-label="Apps">
+                <LayoutGrid className="h-4 w-4" />
+              </button>
+              <button type="button" className="admin-icon-btn relative" aria-label="Notifications">
+                <Bell className="h-4 w-4" />
+                <span className="admin-bell-dot" />
+              </button>
+              <div className="admin-profile hidden items-center gap-2 sm:flex">
+                <span className="admin-avatar" aria-hidden="true">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={brand.logo} alt="" />
+                </span>
+                <div className="min-w-0 leading-tight">
+                  <p className="truncate text-sm font-semibold text-[var(--admin-text)]">{user}</p>
+                  <p className="truncate text-[11px] text-[var(--admin-muted)]">{email || "Admin"}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={logout}
+                  className="admin-icon-btn"
+                  aria-label="Log out"
+                  title="Log out"
+                >
+                  <LogOut className="h-4 w-4" />
+                </button>
+              </div>
+              <button
+                type="button"
+                onClick={logout}
+                className="admin-icon-btn sm:hidden"
+                aria-label="Log out"
+              >
+                <LogOut className="h-4 w-4" />
+              </button>
+            </div>
+          </header>
+
+          <div className="admin-body">
+            <aside className={cn("admin-sidebar", menuOpen && "is-open")}>
+              {sideLinks.map((link) => {
+                const Icon = link.icon;
+                const active = isActive(pathname, link.href, link.exact);
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    title={link.label}
+                    aria-label={link.label}
+                    aria-current={active ? "page" : undefined}
+                    onClick={() => setMenuOpen(false)}
+                    className={cn("admin-side-link", active && "is-active")}
+                  >
+                    <Icon className="h-[22px] w-[22px]" strokeWidth={active ? 2.25 : 1.75} />
+                  </Link>
+                );
+              })}
+              <button
+                type="button"
+                onClick={logout}
+                title="Log out"
+                aria-label="Log out"
+                className="admin-side-link mt-auto"
+              >
+                <LogOut className="h-[22px] w-[22px]" />
+              </button>
+            </aside>
+
+            <main className="admin-content">{children}</main>
+          </div>
+        </div>
+      </div>
+
+      {menuOpen && (
+        <button
+          type="button"
+          className="admin-backdrop lg:hidden"
+          aria-label="Close menu"
+          onClick={() => setMenuOpen(false)}
+        />
+      )}
     </div>
   );
 }
